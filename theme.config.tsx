@@ -7,8 +7,8 @@ import { DocsThemeConfig } from "nextra-theme-docs";
 const rootUrl = "https://tiken.vercel.app";
 
 const config: DocsThemeConfig = {
-  primaryHue: 360,
-  primarySaturation: 60,
+  primaryHue: 5,
+  primarySaturation: 85,
   logo: (
     <>
       <Image src="/logo.svg" width={32} height={32} alt="logo" />
