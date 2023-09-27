@@ -1,0 +1,38 @@
+import { Callout } from "nextra/components";
+
+# GIF から Discord カスタムスタンプを作成する
+
+用法用量を守って作りましょう
+
+## Overview
+
+Discord のスタンプ要件は [`PNG`](https://ja.wikipedia.org/wiki/Portable_Network_Graphics) / [`APNG`](https://ja.wikipedia.org/wiki/Animated_Portable_Network_Graphics) のみ<br/>
+GIF 画像をアニメーションスタンプにしたい場合は、`APNG`に変換する必要がある
+
+<Callout type="info" emoji="ℹ️">
+Discord スタンプ要件（2023-09-27 時点）
+| 要件項目 | 詳細 |
+|:-:|:-:|
+| ファイルの種類 | PNG / APNG |
+| 最大ファイルサイズ | 512 KB |
+| 画像サイズ | 320 px ✕ 320 px (ちょうどが望ましい) |
+| 関連する絵文字 | スタンプのサジェストに利用される、近似の Unicode 絵文字 |
+| 概要(オプション) | スクリーンリーダーを利用するユーザ向けに、どのようなスタンプかを表すテキスト |
+</Callout>
+
+## Flow
+
+1. スタンプにしたいアニメーション画像を `GIF` で用意する
+2. [Convert GIF to Animated PNG](https://ezgif.com/gif-to-apng) に `GIF` をアップロード
+3. `320*320` にリサイズ
+4. `APNG` に変換
+5. ファイルサイズが `512KB` を超えている場合は[最適化](https://ezgif.com/optipng)を行う
+6. Discord の登録したいサーバー設定から、画像をアップロード
+
+## Ref
+
+- [Tips for Sticker Creators FAQ - Discord](https://support.discord.com/hc/ja/articles/4402687377815-Tips-for-Sticker-Creators-FAQ)
+
+## Base
+
+[2023/8/1 13:03:32 の Note - Misskey.io](https://misskey.io/notes/9hvc97aber)
