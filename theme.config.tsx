@@ -65,8 +65,11 @@ const config: DocsThemeConfig = {
         <link rel="icon" href="/logo.svg" />
         <meta property="description" content="Tiken note :)" />
         <meta property="og:description" content="Tiken note ;)" />
+        <meta property="twitter:description" content="Tiken note :o"></meta>
         <meta property="og:url" content={url} />
-        <meta property="og:image" content={rootUrl + "/logo.svg"} />
+        <meta property="og:image" content={rootUrl + "/image.png"} />
+        <meta property="twitter:image" content={rootUrl + "/image.png"} />
+        <meta property="twitter:card" content={rootUrl + "/image.png"}></meta>
         <meta property="og:type" content="blog" />
         <meta property="og:locale" content="ja_JP" />
         <meta charSet="utf-8" />
