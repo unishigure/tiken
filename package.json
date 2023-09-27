@@ -13,9 +13,9 @@
   "author": "unishigured",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/shuding/nextra-docs-template/issues"
+    "url": "https://github.com/unishigure/tiken/issues"
   },
-  "homepage": "https://github.com/shuding/nextra-docs-template#readme",
+  "homepage": "https://tiken.vercel.app",
   "dependencies": {
     "next": "^13.0.6",
     "nextra": "^2.13.1",
