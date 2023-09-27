@@ -57,19 +57,19 @@ const config: DocsThemeConfig = {
   },
   head: () => {
     const { asPath, defaultLocale, locale } = useRouter();
-    const { frontMatter } = useConfig();
     const url =
       rootUrl + (defaultLocale === locale ? asPath : `/${locale}${asPath}`);
 
     return (
       <>
         <link rel="icon" href="/logo.svg" />
-        <meta property="og:image" content={rootUrl + "/logo.svg"} />
+        <meta property="description" content="Tiken note :)" />
+        <meta property="og:description" content="Tiken note ;)" />
         <meta property="og:url" content={url} />
-        <meta
-          property="og:description"
-          content={frontMatter.description || "Tiken note"}
-        />
+        <meta property="og:image" content={rootUrl + "/logo.svg"} />
+        <meta property="og:type" content="blog" />
+        <meta property="og:locale" content="ja_JP" />
+        <meta charSet="utf-8" />
       </>
     );
   },
