@@ -1,0 +1,28 @@
+# Elgato HD60X で PS5 からの 2K 入力が HD 出力になってしまう問題
+
+## Overview
+
+OBS に Elgato HD60X 経由で PS5 から映像を出力しようとしたところ、1440p 設定にしているにも関わらず HD 画質になっていた<br/>
+4K Capture Utility の設定が主な原因だった模様
+
+## Solution
+
+以下の記事内容で解決
+
+[My PS5 doesn't support 1440p when it's connected via my HD60X : elgato](https://www.reddit.com/r/elgato/comments/x8scdc/my_ps5_doesnt_support_1440p_when_its_connected/?utm_source=share&utm_medium=web2x&context=3)
+
+自環境での具体的な設定値は以下
+
+- 4K Capture Utility
+  - 入力 EDID モード：ディスプレイ
+  - EDID（内部）：1440p
+- OBS 出力ソース
+  - 映像キャプチャデバイス：Game Capture HD60 X
+  - 解像度/FPS タイプ：デバイスの既定値
+- OBS 映像設定
+  - 基本（キャンバス）解像度：2560x1440
+  - 出力（スケーリング）解像度：2560x1440
+
+## Base
+
+[2023/7/6 12:07:06 の Note - misskey.cloud ](https://misskey.cloud/notes/9gu4sher4t)

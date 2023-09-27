@@ -4,5 +4,6 @@
     "display": "hidden"
   },
   "nextjs": "Next.js",
-  "java": "Java"
+  "java": "Java",
+  "environment": "Environment"
 }
