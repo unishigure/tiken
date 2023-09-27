@@ -43,6 +43,7 @@ const config: DocsThemeConfig = {
   toc: {
     backToTop: true,
   },
+  navigation: false,
   footer: {
     text: <p> © {new Date().getFullYear()} unishigured </p>,
   },
