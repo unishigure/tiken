@@ -1,0 +1,42 @@
+import { Callout } from "nextra/components";
+
+# 拡張機能 Markdown Preview Github Styling の CSS 上書き
+
+## Overview
+
+VSCode 拡張機能 [Markdown Preview Github Styling](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-preview-github-styles) は、ビルトインの Markdown プレビューを、Github 風に変更してくれるもの<br/>
+この CSS を上書きし、更に好みの外観に変更する
+
+## Content
+
+1. ワークスペース設定で`markdown.styles`に CSS ファイルを設定
+
+```json filename="settings.json"
+{
+  "markdown.styles": [".vscode/style.css"]
+}
+```
+
+<Callout type="warning" emoji="⚠️">
+  以下の仕様のため、共通設定とすることは出来ない模様
+  > 実はワークスペース以下しか見ない仕様。
+</Callout>
+
+2. `github-markdown-body`要素に対して、変更したい CSS を記述
+
+> Make sure you apply your styles to the .github-markdown-body instead of just body so they don't get overridden by this extension
+
+```css filename="style.css"
+.github-markdown-body {
+    // favourite styles
+}
+```
+
+## Ref
+
+- [Markdown Preview Github Styling - Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-preview-github-styles)
+- [2018 年 4 月頃に行う VSCode/Markdown で CSS が変更できない - Qiita](https://qiita.com/ueruku/items/abd092f37493662f52e4#%E3%81%AA%E3%81%AB%E3%81%8C%E3%81%84%E3%81%91%E3%81%AA%E3%81%8B%E3%81%A3%E3%81%9F%E3%81%AE%E3%81%8B)
+
+## Base
+
+[2023/7/23 15:18:39 の Note - Misskey.io](https://misskey.io/notes/9him4atu4p)
