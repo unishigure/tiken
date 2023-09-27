@@ -1,0 +1,117 @@
+import { Callout } from "nextra/components";
+
+# Nextra を Github Pages にデプロイする
+
+めちゃくちゃ大変だった
+
+## Overview
+
+[Next.js][nextjs] のサイト生成フレームワーク [Nextra](https://nextra.site/) を使って作成したサイトを、[Github Pages](https://docs.github.com/ja/pages/getting-started-with-github-pages/about-github-pages) にデプロイする<br/>
+つまり~~このサイト~~旧サイトの建て方
+
+よくある [Next.js][nextjs] の方法や参照したサイトの方法だけでは、上手くルーティングされなかったのでまとめておく
+
+<Callout type="warning" emoji="⚠️">
+  [Vercel][vercel] の方が圧倒的に簡単かつ楽で管理もしやすいため、特に理由がなければ [Vercel][vercel] に作成するのがおすすめ
+</Callout>
+
+<Callout type="info" emoji="ℹ️">
+  [公式のGet Started](https://nextra.site/docs/docs-theme/start)に従いテンプレートから作成すると、最新のNextraパッケージがインストールされなかったため、手動で`package.json`の修正が必要だった（`latest`→`^2.13.1`）
+</Callout>
+
+## In short
+
+試行した順序がもうわからないので不要な設定もあるかもしれない<br/>
+が一応書いておく
+
+- `package.json`
+  - `scripts`に`export`を追記
+  ```json {6}
+  "scripts": {
+      "dev": "next dev",
+      "build": "next build",
+      "start": "next start",
+      "lint": "next lint",
+      "export": "next build && next export",
+      "deploy": "gh-pages -d build"
+  },
+  ```
+  - `homepage`を追記
+  ```json {4}
+  {
+    "name": "my-blog",
+    "private": true,
+    "homepage": "https://unishigure.github.io/tiken/"
+    // etc
+  }
+  ```
+- `next.config.js`
+
+  - 画像最適化の非有効化オプションを追記
+
+  ```js {3-5}
+  module.exports = withNextra({
+    reactStrictMode: true,
+    images: {
+      unoptimized: true,
+    },
+    basePath: assetPrefix,
+  });
+  ```
+
+  - `basePath`を追記
+
+  ```js {1-2,15}
+  const isProduction = process.env.NODE_ENV === "production";
+  const assetPrefix = isProduction ? "/tiken" : "";
+
+  const withNextra = require("nextra")({
+    theme: "nextra-theme-docs",
+    themeConfig: "./theme.config.jsx",
+    defaultShowCopyCode: true,
+  });
+
+  module.exports = withNextra({
+    reactStrictMode: true,
+    images: {
+      unoptimized: true,
+    },
+    basePath: assetPrefix,
+  });
+  ```
+
+- **[Option]** 画像を表示したい場合<br/>
+  上記で多分 Nextra 本体は読み込まれるが、画像が上手く読み込まれない
+
+  - `assetPrefix`を用意
+
+    ```ts filename="config/constants.ts" {5}
+    export const rootUrl = "https://unishigure.github.io/tiken";
+    export const repoUrl = "https://github.com/unishigure/tiken";
+
+    const isProduction = process.env.NODE_ENV === "production";
+    export const assetPrefix = isProduction ? "/tiken" : "";
+    ```
+
+  - 画像を利用する箇所で`assetPrefix`を参照
+    ```ts filename="theme.config.jsx"
+    logo: (
+        <>
+        <Image src={`${assetPrefix}/logo.svg`} width={32} height={32} />
+        <span style={{ marginLeft: ".4em", fontWeight: 800 }}>UniNote</span>
+        </>
+    ),
+    ```
+
+## ~~Detail~~
+
+~~wip~~ canceled
+
+## Ref
+
+- [Hosting Nextra (Next.js static site generator) website on GitHub Pages - Stack Overflow](https://stackoverflow.com/questions/68715944/hosting-nextra-next-js-static-site-generator-website-on-github-pages)
+- [Next.js のアプリケーションを GitHub Pages に公開する - アルゴリズム弱太郎](https://01futabato10.hateblo.jp/entry/2023/07/09/175528)
+- [GitHub Pages に Next.js をデプロイする - Qiita](https://qiita.com/_aaa/items/87e9e822800403904dc8)
+
+[nextjs]: https://nextjs.org/
+[vercel]: https://vercel.com/
