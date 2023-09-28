@@ -47,30 +47,48 @@ const config: DocsThemeConfig = {
     text: <p> © {new Date().getFullYear()} unishigured </p>,
   },
   useNextSeoProps() {
-    const { asPath } = useRouter();
-    if (asPath !== "/") {
-      return { titleTemplate: "%s - UniNote" };
-    } else {
-      return { titleTemplate: "UniNote" };
-    }
-  },
-  head: () => {
     const { asPath, defaultLocale, locale } = useRouter();
+
     const url =
       rootUrl + (defaultLocale === locale ? asPath : `/${locale}${asPath}`);
 
+    let titleTemplate = "";
+    if (asPath !== "/") {
+      titleTemplate = "%s - UniNote";
+    } else {
+      titleTemplate = "UniNote";
+    }
+
+    return {
+      titleTemplate: titleTemplate,
+      description: "Tiken note :)",
+      openGraph: {
+        url: url,
+        title: titleTemplate,
+        description: "Tiken note ;)",
+        images: [
+          {
+            url: rootUrl + "/logo.png",
+            width: 750,
+            height: 750,
+            alt: "logo",
+            type: "image/png",
+          },
+        ],
+        type: "blog",
+        locale: "ja_JP",
+      },
+      twitter: {
+        cardType: "summary_large_image",
+      },
+    };
+  },
+  head: () => {
     return (
       <>
         <link rel="icon" href="/logo.svg" />
-        <meta property="description" content="Tiken note :)" />
-        <meta property="og:description" content="Tiken note ;)" />
         <meta property="twitter:description" content="Tiken note :o"></meta>
-        <meta property="og:url" content={url} />
-        <meta property="og:image" content={rootUrl + "/logo.png"} />
         <meta property="twitter:image" content={rootUrl + "/image.png"} />
-        <meta property="twitter:card" content="summary_large_image"></meta>
-        <meta property="og:type" content="blog" />
-        <meta property="og:locale" content="ja_JP" />
         <meta charSet="utf-8" />
       </>
     );
