@@ -64,7 +64,6 @@ const config: DocsThemeConfig = {
       description: "Tiken note :)",
       openGraph: {
         url: url,
-        title: titleTemplate,
         description: "Tiken note ;)",
         images: [
           {
