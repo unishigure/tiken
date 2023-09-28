@@ -1,7 +1,6 @@
 import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useConfig } from "nextra-theme-docs";
 import { DocsThemeConfig } from "nextra-theme-docs";
 
 const rootUrl = "https://tiken.vercel.app";
