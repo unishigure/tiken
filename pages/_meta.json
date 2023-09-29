@@ -3,9 +3,9 @@
     "title": "Introduction",
     "display": "hidden"
   },
+  "works": "Works",
   "nextjs": "Next.js",
   "java": "Java",
   "vscode": "VSCode",
-  "others": "Others",
-  "works": "Works"
+  "others": "Others"
 }
