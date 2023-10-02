@@ -1,4 +1,3 @@
-import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { DocsThemeConfig } from "nextra-theme-docs";
@@ -37,6 +36,7 @@ const config: DocsThemeConfig = {
       return <>{title}</>;
     },
     toggleButton: true,
+    defaultMenuCollapseLevel: 1
   },
   editLink: { text: null },
   toc: {
