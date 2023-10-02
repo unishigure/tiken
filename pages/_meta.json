@@ -6,9 +6,6 @@
   "works": "Works",
   "nextjs": "Next.js",
   "java": "Java",
-  "vscode": "VSCode",
-  "others": {
-    "title": "Others",
-    "display": "hidden"
-  }
+  "others": "Others",
+  "vscode": "VSCode"
 }
