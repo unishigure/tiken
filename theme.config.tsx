@@ -43,6 +43,21 @@ const config: DocsThemeConfig = {
     backToTop: true,
   },
   navigation: false,
+  gitTimestamp: function GitTimestamp({ timestamp }) {
+    return (
+      <>
+        Last updated on{" "}
+        <time dateTime={timestamp.toISOString()}>
+          {timestamp.toLocaleDateString(undefined, {
+            weekday: "short",
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+          })}
+        </time>
+      </>
+    );
+  },
   footer: {
     text: <p> © {new Date().getFullYear()} unishigured </p>,
   },
