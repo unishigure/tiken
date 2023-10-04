@@ -36,7 +36,7 @@ const config: DocsThemeConfig = {
       return <>{title}</>;
     },
     toggleButton: true,
-    defaultMenuCollapseLevel: 1
+    defaultMenuCollapseLevel: 1,
   },
   editLink: { text: null },
   toc: {
@@ -101,6 +101,8 @@ const config: DocsThemeConfig = {
     return (
       <>
         <link rel="icon" href="/logo.svg" />
+        <link rel="me" href="https://misskey.io/@unishigured" />
+        <link rel="me" href="https://fedibird.com/@unishigured" />
         <meta property="twitter:description" content="Tiken note :o"></meta>
         <meta property="twitter:image" content={rootUrl + "/image.png"} />
         <meta charSet="utf-8" />
