@@ -106,6 +106,10 @@ const config: DocsThemeConfig = {
         <meta property="twitter:description" content="Tiken note :o"></meta>
         <meta property="twitter:image" content={rootUrl + "/image.png"} />
         <meta charSet="utf-8" />
+        <meta
+          name="google-site-verification"
+          content="T4LSoxsq2zt6GYu5Y6bVVeiKnpRbxJ7ppu0XoHUusVU"
+        />
       </>
     );
   },
