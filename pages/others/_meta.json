@@ -1,4 +1,5 @@
 {
+  "build-misskey-in-vultr": "個人用 Misskey サーバを構築する",
   "create-discord-sticker": "GIF から Discord カスタムスタンプを作成する",
   "public-renote-mk-plugin": "Misskey Plugin \"Public Renote\"",
   "ps5-hd60x-1440p": "HD60X で PS5 からの 2k 入力が HD 出力になってしまう問題"

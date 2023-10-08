@@ -1,0 +1,54 @@
+# 個人用 Misskey サーバを構築する
+
+## Overview
+
+個人で遊ぶ用の Misskey サーバ（v2023.10.0-beta.9）を構築する
+
+## Architecture
+
+- VPS
+
+[Vultr](https://www.vultr.com/) で一番安そうな VPS を借りた<br/>
+インストール/アップデート時以外の負荷はそこまで掛からないらしい
+
+Vultr サーバの環境構築については以下を参考にした<br/>
+[Misskey のサーバを設置する（v11 系） - noellabo's tech blog](https://blog.noellabo.jp/entry/2019/08/14/8i3RHuZ1wJNDinIn)
+
+| 項目        | 内容                |
+| ----------- | ------------------- |
+| Server      | Vultr Cloud Compute |
+| Location    | Tokyo               |
+| OS          | Ubuntu 22.04        |
+| Application | NodeJS              |
+| Storage     | 25 GB NVMe          |
+| vCPU/s      | 1 vCPU              |
+| RAM         | 1024.00 MB          |
+| Additonal   | Enable IPv6         |
+
+- Domain / DNS
+
+[Cloudflare Registrar](https://www.cloudflare.com/ja-jp/products/registrar/) でドメインを取得、管理
+
+- Object Storage
+
+[Cloudflare R2](https://www.cloudflare.com/ja-jp/developer-platform/r2/) を利用
+
+## Flow
+
+wip
+
+- Cloudflare の設定
+- SSH の設定
+- [Misskey install shell script v3.0.0](https://misskey-hub.net/docs/install/bash.html) の実行
+- オブジェクトストレージの設定
+- バックアップの設定
+
+## Ref
+
+- [Misskey 構築の手引き | Misskey Hub](https://misskey-hub.net/docs/install/manual.html)
+- [Misskey のサーバを設置する（v11 系） - noellabo's tech blog](https://blog.noellabo.jp/entry/2019/08/14/8i3RHuZ1wJNDinIn)
+- [Misskey のおひとり様インスタンスを建てる](https://zenn.dev/see2et/articles/building-an-one-person-instance-of-misskey#ssh%E6%8E%A5%E7%B6%9A%E3%81%A8%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89)
+- [misskey のオブジェクトストレージに cloudflare r2 を利用する - Qiita](https://qiita.com/hihumikan/items/1f692f3bd5516820e0ec)
+- [Misskey インスタンスで最初に設定するべきインスタンス設定とその他設定の説明 | aqz/tamaina](https://hide.ac/articles/Y504SIabp)
+- [misskey データベースのバックアップを cron で定期的に Cloudflare R2 に保存する | 小束弓月](https://note.com/yu_koduka/n/n0ba5807b16bf)
+- [Amazon S3 と API の互換性がある Cloudflare R2 を AWS CLI から使ってみる | DevelopersIO](https://dev.classmethod.jp/articles/using-cloudflare-r2-compatible-with-amazon-s3-api-from-aws-cli/)
