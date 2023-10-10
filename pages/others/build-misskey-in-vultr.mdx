@@ -4,7 +4,7 @@ import { Callout } from "nextra/components";
 
 ## Overview
 
-個人で遊ぶ用の Misskey サーバ（v2023.10.0）を Vultr と Cloudflare で構築する
+個人で遊ぶ用の [Misskey](https://github.com/misskey-dev/misskey) サーバ（v2023.10.0）を Vultr と Cloudflare で構築する
 
 ## Architecture
 
@@ -34,18 +34,7 @@ import { Callout } from "nextra/components";
 
 ## Flow
 
-WIP
-
-- ToDo
-  - ~~Cloudflare で Domain の取得~~
-  - ~~Vultr で VPS サーバを構築する~~
-  - ~~Cloudflare で DNS の設定~~
-  - Vultr サーバ への SSH の設定
-  - ~~Misskey install shell script v3.0.0 の実行~~
-  - Cloudflare R2 でオブジェクトストレージの設定
-  - Cloudflare R2 でバックアップの設定
-  - ~~ノート検索の許可~~
-  - (Meilisearch の設定)
+ドメインの購入から Misskey の起動までの一連の流れ
 
 ### Cloudflare で Domain の取得
 
@@ -103,6 +92,12 @@ DNS レコードの管理画面が表示されるので、レコードの追加�
 
 ![dnsSetting2](/others/dnsSetting2.png)
 
+### Vultr サーバ への SSH の設定
+
+WIP
+
+[Misskey のサーバを設置する（v11 系） - noellabo's tech blog](https://blog.noellabo.jp/entry/2019/08/14/8i3RHuZ1wJNDinIn)
+
 ### [Misskey install shell script v3.0.0](https://misskey-hub.net/docs/install/bash.html) の実行
 
 手動でやってみたりしようともしたけど、多分これが一番楽で早いと思います
@@ -146,12 +141,30 @@ DNS レコードの管理画面が表示されるので、レコードの追加�
 | Do you want to install redis locally?                         | Y                                                      |
 | Redis password                                                | (Any password)                                         |
 
+### Cloudflare R2 でオブジェクトストレージの設定
+
+WIP
+
+[misskey のオブジェクトストレージに cloudflare r2 を利用する - Qiita](https://qiita.com/hihumikan/items/1f692f3bd5516820e0ec)
+
+### Cloudflare R2 でバックアップの設定
+
+WIP
+
+[misskey データベースのバックアップを cron で定期的に Cloudflare R2 に保存する | 小束弓月](https://note.com/yu_koduka/n/n0ba5807b16bf)
+
 ### ノート検索の許可
 
 （おそらく）デフォルトだとノート検索は無効になっている（負荷対策？）<br/>
 コントロールパネル > 管理 > ロール > ベースロール 内の **ノート検索の利用** を **はい** に変更する
 
 ![changeSearchPermission](/others/changeSearchPermission.png)
+
+### (Meilisearch の設定)
+
+WIP
+
+[meilisearch not working · Issue #11998 · misskey-dev/misskey](https://github.com/misskey-dev/misskey/issues/11998)
 
 ## Bonus
 
