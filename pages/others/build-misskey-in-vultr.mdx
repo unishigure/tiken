@@ -9,33 +9,32 @@ import { Callout } from "nextra/components";
 ## Architecture
 
 - VPS
+  [Vultr](https://www.vultr.com/) で一番安そうな VPS を借りた<br/>
+  インストール/アップデート時以外の負荷はそこまで掛からないらしい
 
-[Vultr](https://www.vultr.com/) で一番安そうな VPS を借りた<br/>
-インストール/アップデート時以外の負荷はそこまで掛からないらしい
+  Vultr サーバの環境構築については以下を参考にした<br/>
+  [Misskey のサーバを設置する（v11 系） - noellabo's tech blog](https://blog.noellabo.jp/entry/2019/08/14/8i3RHuZ1wJNDinIn)
 
-Vultr サーバの環境構築については以下を参考にした<br/>
-[Misskey のサーバを設置する（v11 系） - noellabo's tech blog](https://blog.noellabo.jp/entry/2019/08/14/8i3RHuZ1wJNDinIn)
-
-| Column      | Value               |
-| ----------- | ------------------- |
-| Server      | Vultr Cloud Compute |
-| Location    | Tokyo               |
-| OS          | Ubuntu 22.04        |
-| Application | NodeJS              |
-| Storage     | 25 GB NVMe          |
-| vCPU/s      | 1 vCPU              |
-| RAM         | 1024.00 MB          |
-| Additonal   | Enable IPv6         |
+  | Column      | Value               |
+  | ----------- | ------------------- |
+  | Server      | Vultr Cloud Compute |
+  | Location    | Tokyo               |
+  | OS          | Ubuntu 22.04        |
+  | Application | NodeJS              |
+  | Storage     | 25 GB NVMe          |
+  | vCPU/s      | 1 vCPU              |
+  | RAM         | 1024.00 MB          |
+  | Additonal   | Enable IPv6         |
 
 - Domain / DNS
-
-[Cloudflare Registrar](https://www.cloudflare.com/ja-jp/products/registrar/) でドメインを取得、管理
+  [Cloudflare Registrar](https://www.cloudflare.com/ja-jp/products/registrar/) でドメインを取得、管理
 
 - Object Storage
-
-[Cloudflare R2](https://www.cloudflare.com/ja-jp/developer-platform/r2/) を利用
+  [Cloudflare R2](https://www.cloudflare.com/ja-jp/developer-platform/r2/) を利用
 
 ## Flow
+
+上述の Vultr サーバの環境構築と、Cloudflare でのドメイン取得が完了している前提
 
 WIP
 
@@ -65,7 +64,7 @@ WIP
   > RedisやPostgresのインストールが終わっている場合、「`install locally`」は`No`にしてください。
 </Callout>
 
-以下、筆者の選択一覧 大体デフォルト
+以下、筆者の選択一覧　大体デフォルト
 
 | Install script option                                         | Value                                                  |
 | ------------------------------------------------------------- | ------------------------------------------------------ |
