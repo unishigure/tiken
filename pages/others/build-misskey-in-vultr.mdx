@@ -13,9 +13,6 @@ import { Callout } from "nextra/components";
   [Vultr](https://www.vultr.com/) で一番安そうな VPS を借りた<br/>
   インストール/アップデート時以外の負荷はそこまで掛からないらしい
 
-  Vultr サーバの環境構築については以下を参考にした<br/>
-  [Misskey のサーバを設置する（v11 系） - noellabo's tech blog](https://blog.noellabo.jp/entry/2019/08/14/8i3RHuZ1wJNDinIn)
-
   | Column      | Value               |
   | ----------- | ------------------- |
   | Server      | Vultr Cloud Compute |
@@ -37,18 +34,42 @@ import { Callout } from "nextra/components";
 
 ## Flow
 
-上述の Vultr サーバの環境構築と、Cloudflare でのドメイン取得または管理が完了している前提
-
 WIP
 
 - ToDo
-  - Cloudflare の設定
-  - SSH の設定
+  - ~~Cloudflare で Domain の取得~~
+  - ~~Vultr で VPS サーバを構築する~~
+  - Cloudflare で DNS の設定
+  - Vultr サーバ への SSH の設定
   - ~~Misskey install shell script v3.0.0 の実行~~
   - オブジェクトストレージの設定
   - バックアップの設定
   - ~~ノート検索の許可~~
   - Meilisearch の設定
+
+### Cloudflare で Domain の取得
+
+Cloudflare で好みのドメインを購入する
+
+Cloudflare にサインイン、ログインした後、ダッシュボードが確認できるようになるため、<br/>
+左のサイドバーから ドメイン登録 > ドメインの登録 を開く
+
+![registerDomain1](/others/registerDomain1.png)
+
+好みのドメイン名で検索すれば、利用可能な類似のドメイン名が一覧で表示される<br/>
+利用ができないドメイン名であれば、その旨も表示されるので再考する
+
+![registerDomain2](/others/registerDomain2.png)
+
+利用したいドメイン名を選択できたら、購入を完了する
+
+### Vultr で VPS サーバを構築する
+
+Vultr サーバの環境構築については以下の記事を参考のこと<br/>
+この記事の **VPSサーバを借りて、環境を整備する** の項に従って実行すれば、このステップは完了<br/>
+筆者の VPS の構築については、上述の [Architecture](#architecture) に記載
+
+[Misskey のサーバを設置する（v11 系） - noellabo's tech blog](https://blog.noellabo.jp/entry/2019/08/14/8i3RHuZ1wJNDinIn)
 
 ### [Misskey install shell script v3.0.0](https://misskey-hub.net/docs/install/bash.html) の実行
 
@@ -63,9 +84,8 @@ WIP
 ![checkCloudflareApiKey](/others/checkCloudflareApiKey.png)
 
 <Callout type="error" emoji="️🚫">
-  途中で処理に失敗し、再度スクリプトを実行する場合は以下に注意する >
-  RedisやPostgresのインストールが終わっている場合、「`install
-  locally`」は`No`にしてください。
+  途中で処理に失敗し、再度スクリプトを実行する場合は以下に注意する
+  > RedisやPostgresのインストールが終わっている場合、「`install locally`」は`No`にしてください。
 </Callout>
 
 以下、筆者の選択一覧　大体デフォルト
