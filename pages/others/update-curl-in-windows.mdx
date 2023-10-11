@@ -1,0 +1,38 @@
+# Windows 環境で cURL をアップデートする
+
+## Overview
+
+Windows 環境でプリインストールされたバージョンを回避して、cURL を手動でアップデートする
+
+「過去最悪」の脆弱性が解決されたらしいので、アップデートしてみようと思ったらちょっと面倒だった<br/>
+[「過去最悪」の脆弱性に対処した「curl 8.4.0」が公開 - 窓の杜](https://forest.watch.impress.co.jp/docs/news/1538153.html)
+
+## In Short
+
+1. [cURL](https://curl.se/)の公式サイトから[最新版](https://curl.se/windows/latest.cgi?p=win64-mingw.zip)（もしくは希望のバージョン）の`zip`ファイルをダウンロードする
+
+2. ダウンロードした`zip`を解凍し、任意の場所に保存
+
+3. 環境変数`Path`に cURL の bin ディレクトリのパスを追加
+
+   ```text
+   C:\Program Files\curl\bin
+   ```
+
+4. 環境変数`Path`の順序を入れ替えて、`C:\Windows\system32`よりも上に 3. で追加した cURL のあるパスを持ってくる
+
+5. PC を再起動する
+
+## Detail
+
+Windows には cURL がプリインストールされており、`C:\Windows\System32\curl.exe`に存在する<br/>
+が更新が遅い
+
+`C:\Windows\system32`が`Path`の上位に記述されているため、手動でダウンロードして新規に`Path`を追加しただけではプリインストールされた cURL を回避することができなかった
+
+`C:\Windows\System32\curl.exe`の移動や削除も試みたが、TrustedInstaller のアクセス許可が必要と表示され、無理やり実行するのは面倒そうだった
+
+## Ref
+
+- [curl のインストール（Windows 上）](https://www.kkaneko.jp/tools/win/curl.html)
+- [Windows10 に curl を入れてもバージョンが固定されてしまう - たのしい駆動開発](https://ssabcire.hatenablog.com/entry/2018/08/02/233545)
