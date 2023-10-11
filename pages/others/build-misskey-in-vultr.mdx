@@ -108,13 +108,13 @@ DNS レコードの管理画面が表示されるので、**レコードの追�
    保存先ファイルの指定はデフォルトでよい<br/>
    パスフレーズは空でも生成できるが、セキュリティの面で設定しておいた方が良い
 
-   ```shell
+   ```bash
    ssh-keygen -t ed25519
    ```
 
    作成後、以下のように保存先が表示されるため、確認しておく
 
-   ```shell
+   ```bash
    Your identification has been saved in C:/Users/USERNAME/.ssh/id_ed25519
    Your public key has been saved in C:/Users/USERNAME/.ssh/id_ed25519.pub
    ```
@@ -126,7 +126,7 @@ DNS レコードの管理画面が表示されるので、**レコードの追�
    `config` ファイルが既にある場合はそれに追記する<br/>
    なければテキストエディタで新規に作成する
 
-   ```txt
+   ```text filename=".ssh/config"
    Host misskey                          # 任意の接続先名
          User {{YourUserName}}           # この後 VPS 上に作成する作業用ユーザ
          Hostname xx.xx.xx.xx            # VPS の IP Address
@@ -139,7 +139,7 @@ DNS レコードの管理画面が表示されるので、**レコードの追�
    初回接続時のみ接続を続けるか確認されるため、`yes`を入力する<br/>
    root ユーザのパスワードを要求されるため、Vultr で確認した Password を入力する
 
-   ```shell
+   ```bash
    ssh root@misskey
    ```
 
@@ -147,13 +147,13 @@ DNS レコードの管理画面が表示されるので、**レコードの追�
 
    新しいユーザを作成する
 
-   ```shell
+   ```bash
    adduser {{YourUserName}}
    ```
 
    作成したユーザに sudo 実行を許可する
 
-   ```shell
+   ```bash
    usermod -aG sudo {{YourUserName}}
    ```
 
@@ -161,7 +161,7 @@ DNS レコードの管理画面が表示されるので、**レコードの追�
 
    作業用ユーザに切り替えて、SSH Key の保存先を作成する
 
-   ```shell
+   ```bash
    sudo -iu {{YourUserName}}
    mkdir .ssh
    chmod 700 .ssh
@@ -178,7 +178,7 @@ DNS レコードの管理画面が表示されるので、**レコードの追�
 
    `sshd_config` を開く
 
-   ```shell
+   ```bash
    sudo nano /etc/ssh/sshd_config
    ```
 
@@ -189,13 +189,13 @@ DNS レコードの管理画面が表示されるので、**レコードの追�
 
    sshd の設定をテストする
 
-   ```shell
+   ```bash
    sudo sshd -t
    ```
 
    問題がなければ、sshd を再起動する
 
-   ```shell
+   ```bash
    sudo systemctl restart sshd
    ```
 
@@ -203,7 +203,7 @@ DNS レコードの管理画面が表示されるので、**レコードの追�
 
    SSH 接続だけを許可する
 
-   ```shell
+   ```bash
    sudo ufw allow 22/tcp
    sudo ufw enable
    ```
@@ -215,7 +215,7 @@ DNS レコードの管理画面が表示されるので、**レコードの追�
    新しくコマンドプロンプトを開き、以下のコマンドで接続する<br/>
    パスフレーズを設定した場合は、入力する
 
-   ```shell
+   ```bash
    ssh misskey
    ```
 
