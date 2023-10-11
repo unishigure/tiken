@@ -36,7 +36,8 @@ import { Callout } from "nextra/components";
 
 ## Flow
 
-ドメインの購入から Misskey の起動までの一連の流れ
+ドメインの購入から Misskey の起動までの一連の流れ<br/>
+ポートの変更などは特にしていないので、こだわりや事情がある場合は適宜変更してください
 
 ### Cloudflare で Domain の取得
 
@@ -65,8 +66,9 @@ Cloudflare で好みのドメインを購入する
 [Misskey のサーバを設置する（v11 系） - noellabo's tech blog](https://blog.noellabo.jp/entry/2019/08/14/8i3RHuZ1wJNDinIn)
 
 <Callout type="info" emoji="️ℹ️">
-  DNS の設定に必要となるため、作成した VPS の `IP Address` と `IPv6 Address`
-  を確認しておく
+  DNS の設定のため、`IP Address` と `IPv6 Address` を確認しておく
+  SSH の設定のため、root ユーザの `Password` を確認しておく
+  ![checkVpsInfo](/others/checkVpsInfo.png)
 </Callout>
 
 ---
@@ -89,20 +91,135 @@ DNS レコードの管理画面が表示されるので、**レコードの追�
   サブドメインを付与したくない場合は、`@`を入力する
 </Callout>
 
-| タイプ | 名前           | アドレス                |
-| ------ | -------------- | ----------------------- |
-| A      | (サブドメイン) | (Vultr の IP Address)   |
-| AAAA   | (サブドメイン) | (Vultr の IPv6 Address) |
+| タイプ | 名前           | アドレス                      |
+| ------ | -------------- | ----------------------------- |
+| A      | (サブドメイン) | (Vultr で確認した IP Address) |
+| AAAA   | (サブドメイン) | (Vultr で確認した Address)    |
 
 ![dnsSetting2](/others/dnsSetting2.png)
 
 ---
 
-### Vultr サーバ への SSH の設定
+### SSH 接続の設定
 
-WIP
+1. SSH Key の生成
 
-[Misskey のサーバを設置する（v11 系） - noellabo's tech blog](https://blog.noellabo.jp/entry/2019/08/14/8i3RHuZ1wJNDinIn)
+   SSH Key を生成しておく<br/>
+   保存先ファイルの指定はデフォルトでよい<br/>
+   パスフレーズは空でも生成できるが、セキュリティの面で設定しておいた方が良い
+
+   ```shell
+   ssh-keygen -t ed25519
+   ```
+
+   作成後、以下のように保存先が表示されるため、確認しておく
+
+   ```shell
+   Your identification has been saved in C:/Users/USERNAME/.ssh/id_ed25519
+   Your public key has been saved in C:/Users/USERNAME/.ssh/id_ed25519.pub
+   ```
+
+2. `.ssh/config` の記述
+
+   VPS への接続情報を `.ssh/config` に記述する (SSH Key の保存先と同じディレクトリ下)
+
+   `config` ファイルが既にある場合はそれに追記する<br/>
+   なければテキストエディタで新規に作成する
+
+   ```txt
+   Host misskey                          # 任意の接続先名
+         User {{YourUserName}}           # この後 VPS 上に作成する作業用ユーザ
+         Hostname xx.xx.xx.xx            # VPS の IP Address
+         IdentityFile ~/.ssh/id_ed25519  # 上記で作成した SSH Key のファイルパス
+   ```
+
+3. SSH で VPS に接続
+
+   まず root ユーザで VPS サーバに接続する<br/>
+   初回接続時のみ接続を続けるか確認されるため、`yes`を入力する<br/>
+   root ユーザのパスワードを要求されるため、Vultr で確認した Password を入力する
+
+   ```shell
+   ssh root@misskey
+   ```
+
+4. 作業用ユーザを作成する
+
+   新しいユーザを作成する
+
+   ```shell
+   adduser {{YourUserName}}
+   ```
+
+   作成したユーザに sudo 実行を許可する
+
+   ```shell
+   usermod -aG sudo {{YourUserName}}
+   ```
+
+5. VPS に SSH Key を保存する
+
+   作業用ユーザに切り替えて、SSH Key の保存先を作成する
+
+   ```shell
+   sudo -iu {{YourUserName}}
+   mkdir .ssh
+   chmod 700 .ssh
+   cd .ssh
+   touch authorized_keys
+   chmod 600 authorized_keys
+   nano authorized_keys
+   ```
+
+   nano エディタが開くので、1.でローカルに生成した `id_ed25519.pub` ファイルの内容を転記する<br/>
+   `Ctrl+S` で保存し、`Ctrl+X` でエディタを終了する
+
+6. sshd の設定
+
+   `sshd_config` を開く
+
+   ```shell
+   sudo nano /etc/ssh/sshd_config
+   ```
+
+   以下の項目からコメントアウト(`#`)を削除し、設定を変更する
+
+   - `PermitRootLogin no` : ルートのログインを禁止する
+   - `PasswordAuthentication no` : パスワードでのログインを禁止する
+
+   sshd の設定をテストする
+
+   ```shell
+   sudo sshd -t
+   ```
+
+   問題がなければ、sshd を再起動する
+
+   ```shell
+   sudo systemctl restart sshd
+   ```
+
+7. ファイアウォールの設定
+
+   SSH 接続だけを許可する
+
+   ```shell
+   sudo ufw allow 22/tcp
+   sudo ufw enable
+   ```
+
+8. 接続確認
+
+   ここまでの設定で、意図通り SSH 接続ができることを確認する
+
+   新しくコマンドプロンプトを開き、以下のコマンドで接続する<br/>
+   パスフレーズを設定した場合は、入力する
+
+   ```shell
+   ssh misskey
+   ```
+
+   作成した作業用ユーザで接続が出来ていれば、SSH の設定は完了
 
 ---
 
@@ -154,8 +271,8 @@ WIP
 ### Cloudflare R2 でオブジェクトストレージの設定
 
 以下の記事を参照のこと<br/>
-概ねこの通りで問題ないが、追記にあるとおり **Region** を`us-east-1`とし、**Proxyを利用する**を**無効**にする必要がある<br/>
-また、**アップロード時に'public-read'を設定する**を**有効**にする
+概ねこの通りで問題ないが、追記にあるとおり **Region** を`us-east-1`とし、**Proxy を利用する**を **無効** にする必要がある<br/>
+また、**アップロード時に'public-read'を設定する**を **有効** にする
 
 [misskey のオブジェクトストレージに cloudflare r2 を利用する - Qiita](https://qiita.com/hihumikan/items/1f692f3bd5516820e0ec)
 
