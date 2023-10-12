@@ -59,11 +59,52 @@ Cloudflare で好みのドメインを購入する
 
 ### Vultr で VPS を構築する
 
-以下の記事を参照のこと<br/>
-この記事の **VPS サーバを借りて、環境を整備する** の項に従って実行すれば、このステップは完了<br/>
-筆者の VPS の構築については、上述の [Architecture](#architecture) に記載
+[Vultr](https://www.vultr.com/)にログインし、新規サーバーを作成する
 
-[Misskey のサーバを設置する（v11 系） - noellabo's tech blog](https://blog.noellabo.jp/entry/2019/08/14/8i3RHuZ1wJNDinIn)
+Choose Server で `Cloud Compute` を選択
+
+![choiceVultrVps1](/others/build-misskey-in-vultr/choiceVultrVps1.png)
+
+CPU & Storage Technology で好きなものを選ぶ<br/>
+左2つがおそらく無難　一番右はちょっと安いが性能が低い
+
+![choiceVultrVps2](/others/build-misskey-in-vultr/choiceVultrVps2.png)
+
+Server Location で近所を選ぶ
+
+![choiceVultrVps3](/others/build-misskey-in-vultr/choiceVultrVps3.png)
+
+Server Image の Operatins System で `Ubuntu` の LTS を選択
+
+![choiceVultrVps4](/others/build-misskey-in-vultr/choiceVultrVps4.png)
+
+Server Image の Marketplace Apps で NodeJS を選択
+
+![choiceVultrVps5](/others/build-misskey-in-vultr/choiceVultrVps5.png)
+
+Server Size で好みのサイズを選択<br/>
+後から変更は出来ないため注意
+
+![choiceVultrVps6](/others/build-misskey-in-vultr/choiceVultrVps6.png)
+
+Add Auto Backups もお好みで<br/>
+こちらは後から追加できる模様
+
+![choiceVultrVps7](/others/build-misskey-in-vultr/choiceVultrVps7.png)
+
+Additional Features で `Enable IPv6` を選択
+
+![choiceVultrVps8](/others/build-misskey-in-vultr/choiceVultrVps8.png)
+
+Server Hostname & Label で任意の名前を入力
+
+![choiceVultrVps9](/others/build-misskey-in-vultr/choiceVultrVps9.png)
+
+Deploy を開始
+
+![choiceVultrVps10](/others/build-misskey-in-vultr/choiceVultrVps10.png)
+
+インストールが終了したら、VPS の構築は完了
 
 <Callout type="info" emoji="️ℹ️">
   DNS の設定のため、`IP Address` と `IPv6 Address` を確認しておく<br/>
