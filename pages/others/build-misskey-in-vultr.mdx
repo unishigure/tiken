@@ -46,12 +46,12 @@ Cloudflare で好みのドメインを購入する
 [Cloudflare](https://www.cloudflare.com/) にサインアップ、ログインした後、[ダッシュボード](https://dash.cloudflare.com/)が確認できるようになる<br/>
 左のサイドバーから ドメイン登録 > ドメインの登録 を開く
 
-![registerDomain1](/others/registerDomain1.png)
+![registerDomain1](/others/build-misskey-in-vultr/registerDomain1.png)
 
 好みのドメイン名で検索すれば、利用可能な類似のドメイン名が一覧で表示される<br/>
 利用ができないドメイン名であれば、その旨も表示されるので再考する
 
-![registerDomain2](/others/registerDomain2.png)
+![registerDomain2](/others/build-misskey-in-vultr/registerDomain2.png)
 
 利用したいドメイン名を選択できたら、購入を完了する
 
@@ -68,7 +68,7 @@ Cloudflare で好みのドメインを購入する
 <Callout type="info" emoji="️ℹ️">
   DNS の設定のため、`IP Address` と `IPv6 Address` を確認しておく<br/>
   SSH の設定のため、root ユーザの `Password` を確認しておく
-  ![checkVpsInfo](/others/checkVpsInfo.png)
+  ![checkVpsInfo](/others/build-misskey-in-vultr/checkVpsInfo.png)
 </Callout>
 
 ---
@@ -79,7 +79,7 @@ Cloudflare の[ダッシュボード](https://dash.cloudflare.com/)にて、左�
 
 先程購入したドメインが追加されているので、該当ドメインの **管理** を選択
 
-![dnsSetting1](/others/dnsSetting1.png)
+![dnsSetting1](/others/build-misskey-in-vultr/dnsSetting1.png)
 
 クイックアクションの **DNS の設定を更新する** を選択
 
@@ -96,7 +96,7 @@ DNS レコードの管理画面が表示されるので、**レコードの追�
 | A      | (サブドメイン) | (Vultr で確認した IP Address) |
 | AAAA   | (サブドメイン) | (Vultr で確認した Address)    |
 
-![dnsSetting2](/others/dnsSetting2.png)
+![dnsSetting2](/others/build-misskey-in-vultr/dnsSetting2.png)
 
 ---
 
@@ -233,7 +233,7 @@ DNS レコードの管理画面が表示されるので、**レコードの追�
 途中で Cloudflare の API Key を要求されるが、きちんと誘導してくれるのでそれに従えば問題ない<br/>
 書かれている通り [Cloudflare のダッシュボード](https://dash.cloudflare.com/profile/api-tokens) を開いて `Global API Key` を表示、コピペすればよい
 
-![checkCloudflareApiKey](/others/checkCloudflareApiKey.png)
+![checkCloudflareApiKey](/others/build-misskey-in-vultr/checkCloudflareApiKey.png)
 
 <Callout type="error" emoji="️🚫">
   途中で処理に失敗し、再度スクリプトを実行する場合は以下に注意する
@@ -291,7 +291,7 @@ WIP
 （おそらく）デフォルトだとノート検索は無効になっている（負荷対策？）<br/>
 コントロールパネル > 管理 > ロール > ベースロール 内の **ノート検索の利用** を **はい** に変更する
 
-![changeSearchPermission](/others/changeSearchPermission.png)
+![changeSearchPermission](/others/build-misskey-in-vultr/changeSearchPermission.png)
 
 ## Bonus
 
