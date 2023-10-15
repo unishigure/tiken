@@ -1,0 +1,147 @@
+# Valheim サーバを構築する
+
+## Overview
+
+Valheim ゲームサーバを構築する
+招待リンクでもらった Vultr の $90 分のクレジットの有効期限が迫っているので、何でも良いので何かしたかった
+
+## Flow
+
+### Vultr でサーバを建てる
+
+Vultr でサーバを建てる
+[Misskey を建てたとき](/others/build-misskey-in-vultr)と大体同じなので詳細な手順は割愛
+
+変わったところは SSH Key を Vultr の管理画面から設定したくらい
+
+長期の運用を考えていないため、Misskey より強めの構成にした
+
+| Column      | Value               |
+| ----------- | ------------------- |
+| Server      | Vultr Cloud Compute |
+| Location    | Tokyo               |
+| OS          | Ubuntu 22.04        |
+| Application | -                   |
+| Storage     | 100 GB NVMe         |
+| vCPU/s      | 2 vCPUs             |
+| RAM         | 4096.00 MB          |
+| Additonal   | Enable IPv6         |
+
+### vhserver をインストールする
+
+[LinuxGSM](https://linuxgsm.com/servers/vhserver/)なるコマンドラインツールを利用して、Valheim のゲームサーバ vhserver をデプロイする
+
+VPS に root ユーザで接続する
+
+```bash
+ssh root@<<YourServerIp>>
+```
+
+依存パッケージをインストール
+
+```bash
+sudo dpkg --add-architecture i386; sudo apt update; sudo apt install curl wget file tar bzip2 gzip unzip bsdmainutils python3 util-linux ca-certificates binutils bc jq tmux netcat lib32gcc-s1 lib32stdc++6 libsdl2-2.0-0:i386 steamcmd
+```
+
+ゲームサーバ管理用ユーザを追加
+
+```bash
+adduser vhserver
+```
+
+sudo 権限を付与
+
+```bash
+adduser vhserver sudo
+```
+
+作成したユーザに切り替え
+
+```bash
+su - vhserver
+```
+
+`linuxgsm.sh` をダウンロード
+
+```bash
+wget -O linuxgsm.sh https://linuxgsm.sh && chmod +x linuxgsm.sh && bash linuxgsm.sh vhserver
+```
+
+ここで設定変更が必要な場合、下記の **[設定を変更する](#設定を変更する)** を参照する<br/>
+サーバ名やゲームサーバに接続する際のパスワード、ポートなどを変更したい場合は設定を変更すること
+
+インストールを実行
+
+```bash
+./vhserver install
+```
+
+### 設定を変更する
+
+`~/lgsm/config-lgsm/vhserver/` 配下に設定ファイルが格納されている
+
+`_default.cfg` → `common.cfg` → `vhserver.cfg` の順に設定が読み込まれる<br/>
+`_default.cfg` は書き込み不可（Install 時に元に上書きされる）
+
+`_default.cfg` の項目から、変更したい項目を修正して `vhserver.cfg` に転記する
+
+```bash
+nano ~/lgsm/config-lgsm/vhserver/_default.cfg
+```
+
+```bash
+nano ~/lgsm/config-lgsm/vhserver/vhserver.cfg
+```
+
+サーバ名、サーバパスワードとポートを変更したい場合は、以下の項目を転記
+
+```bash filename="vhserver.cfg"
+servername="Valheim Server"
+serverpassword=""
+port="2456"
+```
+
+インストールを実行
+
+```bash
+./vhserver install
+```
+
+### ゲームサーバを起動
+
+サーバを起動
+
+```bash
+./vhserver start
+```
+
+サーバの詳細を確認
+`Status` が `STARTED` になっていれば起動中
+
+```bash
+./vhserver details
+```
+
+### ポートを開放する
+
+デフォルトでは UDP で `2456` と `2467` を使うので許可する
+
+```bash
+sudo ufw allow 2456/udp
+sudo ufw allow 2457/udp
+```
+
+```bash
+sudo ufw status
+```
+
+ゲームクライアントから接続できるようになる<br/>
+キャラクター選択後、ゲーム参加 > サーバーを追加 を選択し、接続先（e.g. `xxx.xx.xxx.xxx:2456`）を入力<br/>
+サーバパスワードを設定している場合は、こちらも入力
+
+## Ref
+
+- [valheim サーバーを作る | ゆっくり遅報](https://www.yukkuriikouze.com/2021/02/23/4141/)
+- [Valheim | LinuxGSM\_](https://linuxgsm.com/servers/vhserver/)
+- [さくらのゲーミング VPS【第 1 回】初心者でも簡単！さくらの VPS を使った VALHEIM マルチサーバー構築 | さくらのナレッジ](https://knowledge.sakura.ad.jp/28440/)
+- [第 76 回　 Ubuntu のソフトウェアファイアウォール：UFW の利用（1） | gihyo.jp](https://gihyo.jp/admin/serial/01/ubuntu-recipe/0076#sec2_h2)
