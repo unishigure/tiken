@@ -2,10 +2,12 @@
 
 ## Overview
 
-Valheim ゲームサーバを構築する
-招待リンクでもらった Vultr の $90 分のクレジットの有効期限が迫っているので、何でも良いので何かしたかった
+Valheim ゲームサーバを構築する<br/>
+招待リンクでもらった [Vultr](https://www.vultr.com/) の $90 分のクレジットの有効期限が迫っているので、なんかしたかった
 
 ## Flow
+
+ゲームサーバに接続できるようになるまでの一連の流れ
 
 ### Vultr でサーバを建てる
 
@@ -31,10 +33,11 @@ Vultr でサーバを建てる
 
 [LinuxGSM](https://linuxgsm.com/servers/vhserver/)なるコマンドラインツールを利用して、Valheim のゲームサーバ vhserver をデプロイする
 
-VPS に root ユーザで接続する
+VPS に root ユーザで接続する<br/>
+root ユーザのパスワードは [Vultr](https://my.vultr.com/) の管理画面から確認する
 
 ```bash
-ssh root@<<YourServerIp>>
+ssh root@YOUR_SERVER_IP
 ```
 
 依存パッケージをインストール

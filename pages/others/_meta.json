@@ -1,6 +1,6 @@
 {
   "build-misskey-in-vultr": "個人用 Misskey サーバを構築する",
-  "build-velheim-server": "Valheim サーバーを構築する",
+  "build-valheim-server": "Valheim サーバーを構築する",
   "update-curl-in-windows": "Windows 環境で cURL をアップデートする",
   "create-discord-sticker": "GIF から Discord カスタムスタンプを作成する",
   "public-renote-mk-plugin": "Misskey Plugin \"Public Renote\"",
