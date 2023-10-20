@@ -1,0 +1,9 @@
+prefix: "description"
+
+# ==== Prefix ====
+# add:    :sparkles:       ✨ Add pages
+# update: :arrow_up_small: 🔼 Update pages
+# draft:  :construction:   🚧 Work in progress
+# style:  :lipstick:       💄 Change styles
+# fix:    :bug:            🐛 A bug fix or typo
+# chore:  :rainbow:        🌈 Minor updates
