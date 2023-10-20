@@ -429,7 +429,7 @@ Misskey のドライブに画像をアップロードし、画像がボケてい
    ```
 
    以下のスクリプトを `backup-psql-all.sh` にペーストする\
-   YourBacketName には 1. で作成したバケット名を入力\
+   YourBucketName には 1. で作成したバケット名を入力\
    YourProfileName には 3. で作成したプロファイル名を入力\
    YourEndpointName には 1. で確認した S3 API を入力する（`.com`以前まで）
 
@@ -442,7 +442,7 @@ Misskey のドライブに画像をアップロードし、画像がボケてい
    pg_dumpall > dumpall_psql.dmp
    tar czf dumpall_psql.tar.gz dumpall_psql.dmp
    chmod 700 dumpall_psql.tar.gz
-   aws s3 cp dumpall_psql.tar.gz s3://{{YourBacketName}}/dumpall_psql_$TIME.tar.gz --profile {{YourProfileName}} --endpoint-url {{YourEndpointName}}
+   aws s3 cp dumpall_psql.tar.gz s3://{{YourBucketName}}/dumpall_psql_$TIME.tar.gz --profile {{YourProfileName}} --endpoint-url {{YourEndpointName}}
    rm dumpall_psql.tar.gz dumpall_psql.dmp
    ```
 
