@@ -376,9 +376,102 @@ Misskey のドライブに画像をアップロードし、画像がボケてい
 
 ### Cloudflare R2 でバックアップの設定
 
-WIP
+1. バックアップ用の R2 の用意
 
-[misskey データベースのバックアップを cron で定期的に Cloudflare R2 に保存する | 小束弓月](https://note.com/yu_koduka/n/n0ba5807b16bf)
+   [Misskey のオブジェクトストレージ](#cloudflare-r2-でオブジェクトストレージの設定)と同様に、バックアップ用のバケットを作成する
+
+   任意のバケット名を入力して作成する\
+   バケットの詳細画面を開き、**S3 API** を確認する
+
+   更に、設定下部の オブジェクトのライフサイクル ルール を設定する\
+   任意の定期的な期間で、ファイルが順次削除されるよう設定しておく
+
+   ![lifecycleSetting](/others/build-misskey-in-vultr/lifecycleSetting.png)
+
+2. R2 API トークンの用意
+
+   [Misskey のオブジェクトストレージ](#cloudflare-r2-でオブジェクトストレージの設定)と同様に、R2 API トークンを作成する
+
+   任意のトークン名を入力し、権限を **オブジェクトの読み取りと書き込み** とする\
+   作成された S3 クライアント用の **アクセス キー ID** と **シークレット アクセス キー** を確認する
+
+3. aws configure プロファイルの作成
+
+   Misskey サーバーに接続し、postgres ユーザに切り替える
+
+   ```bash
+   ssh misskey
+   ```
+
+   ```bash
+   sudo su - postgres
+   ```
+
+   aws configure プロファイルを作成する
+
+   プロファイル名は任意のものを入力\
+   AWS Access Key ID と AWS Secret Access Key には 1. で確認したものをそれぞれ入力する
+
+   ```bash
+   aws configure --profile {{AnyProfileName}}
+   AWS Access Key ID [None]: {{YourAccessKeyID}}
+   AWS Secret Access Key [None]: {{YourSecretAccessKey}}
+   Default region name [None]:
+   Default output format [None]: json
+   ```
+
+4. シェルスクリプトの配置
+
+   引き続き postgres ユーザでバックアップ用のスクリプトを配置する
+
+   ```bash
+   nano backup-psql-all.sh
+   ```
+
+   以下のスクリプトを `backup-psql-all.sh` にペーストする\
+   YourBacketName には 1. で作成したバケット名を入力\
+   YourProfileName には 3. で作成したプロファイル名を入力\
+   YourEndpointName には 1. で確認した S3 API を入力する（`.com`以前まで）
+
+   ![S3 API sample](/others/build-misskey-in-vultr/s3api_sample.png)
+
+   ```bash filename="backup-psql-all.sh"
+   #!/bin/bash
+   TIME=$(date +%Y%m%d_%H-%M-%S)
+   cd /tmp
+   pg_dumpall > dumpall_psql.dmp
+   tar czf dumpall_psql.tar.gz dumpall_psql.dmp
+   chmod 700 dumpall_psql.tar.gz
+   aws s3 cp dumpall_psql.tar.gz s3://{{YourBacketName}}/dumpall_psql_$TIME.tar.gz --profile {{YourProfileName}} --endpoint-url {{YourEndpointName}}
+   rm dumpall_psql.tar.gz dumpall_psql.dmp
+   ```
+
+   スクリプトの権限を変更
+
+   ```bash
+   chmod 744 backup-psql-all.sh
+   ```
+
+   スクリプトを実行し、`dumpall_psql_yyyyMMdd_HH-mm-ss.tar.gz` のようなファイルが R2 にアップロードされていれば成功
+
+   ```bash
+   bash ./backup-psql-all.sh
+   ```
+
+5. crontab の設定
+
+   引き続き postgres ユーザで crontab を編集する
+
+   ```bash
+   crontab -e
+   ```
+
+   毎日 04:00(UTC) にバックアップ実行する場合は、以下とする\
+   つまり JST だと 13:00 に実行される
+
+   ```bash
+   0 4 * * * bash backup-psql-all.sh
+   ```
 
 ---
 
