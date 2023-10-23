@@ -6,16 +6,11 @@
     "build": "next build",
     "start": "next start"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/unishigure/tiken.git"
+  "author": {
+    "name": "unishigured",
+    "email": "uni@seanut.app"
   },
-  "author": "unishigured",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/unishigure/tiken/issues"
-  },
-  "homepage": "https://tiken.vercel.app",
   "dependencies": {
     "@vercel/analytics": "^1.1.1",
     "next": "^13.5.6",
