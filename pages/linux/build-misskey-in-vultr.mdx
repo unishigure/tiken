@@ -49,12 +49,12 @@ Cloudflare で好みのドメインを購入する
 [Cloudflare](https://www.cloudflare.com/) にサインアップ、ログインした後、[ダッシュボード](https://dash.cloudflare.com/)が確認できるようになる<br/>
 左のサイドバーから ドメイン登録 > ドメインの登録 を開く
 
-![registerDomain1](/others/build-misskey-in-vultr/registerDomain1.png)
+![registerDomain1](/linux/build-misskey-in-vultr/registerDomain1.png)
 
 好みのドメイン名で検索すれば、利用可能な類似のドメイン名が一覧で表示される<br/>
 利用ができないドメイン名であれば、その旨も表示されるので再考する
 
-![registerDomain2](/others/build-misskey-in-vultr/registerDomain2.png)
+![registerDomain2](/linux/build-misskey-in-vultr/registerDomain2.png)
 
 利用したいドメイン名を選択できたら、購入を完了する
 
@@ -66,53 +66,53 @@ Cloudflare で好みのドメインを購入する
 
 Choose Server で `Cloud Compute` を選択
 
-![choiceVultrVps1](/others/build-misskey-in-vultr/choiceVultrVps1.png)
+![choiceVultrVps1](/linux/build-misskey-in-vultr/choiceVultrVps1.png)
 
 CPU & Storage Technology で好きなものを選ぶ<br/>
 左2つがおそらく無難　一番右はちょっと安いが性能が低い
 
-![choiceVultrVps2](/others/build-misskey-in-vultr/choiceVultrVps2.png)
+![choiceVultrVps2](/linux/build-misskey-in-vultr/choiceVultrVps2.png)
 
 Server Location で近所を選ぶ
 
-![choiceVultrVps3](/others/build-misskey-in-vultr/choiceVultrVps3.png)
+![choiceVultrVps3](/linux/build-misskey-in-vultr/choiceVultrVps3.png)
 
 Server Image の Operatins System で `Ubuntu` の LTS を選択
 
-![choiceVultrVps4](/others/build-misskey-in-vultr/choiceVultrVps4.png)
+![choiceVultrVps4](/linux/build-misskey-in-vultr/choiceVultrVps4.png)
 
 Server Image の Marketplace Apps で `NodeJS` を選択
 
-![choiceVultrVps5](/others/build-misskey-in-vultr/choiceVultrVps5.png)
+![choiceVultrVps5](/linux/build-misskey-in-vultr/choiceVultrVps5.png)
 
 Server Size で好みのサイズを選択<br/>
 ~~後から変更は出来ないため注意~~ Settings > Change Plan で出来た<br/>
 現在アップグレードは出来るが、ダウングレードは出来ないらしい
 
-![choiceVultrVps6](/others/build-misskey-in-vultr/choiceVultrVps6.png)
+![choiceVultrVps6](/linux/build-misskey-in-vultr/choiceVultrVps6.png)
 
 Add Auto Backups もお好みで<br/>
 
-![choiceVultrVps7](/others/build-misskey-in-vultr/choiceVultrVps7.png)
+![choiceVultrVps7](/linux/build-misskey-in-vultr/choiceVultrVps7.png)
 
 Additional Features で `Enable IPv6` を選択
 
-![choiceVultrVps8](/others/build-misskey-in-vultr/choiceVultrVps8.png)
+![choiceVultrVps8](/linux/build-misskey-in-vultr/choiceVultrVps8.png)
 
 Server Hostname & Label で任意の名前を入力
 
-![choiceVultrVps9](/others/build-misskey-in-vultr/choiceVultrVps9.png)
+![choiceVultrVps9](/linux/build-misskey-in-vultr/choiceVultrVps9.png)
 
 Deploy を開始
 
-![choiceVultrVps10](/others/build-misskey-in-vultr/choiceVultrVps10.png)
+![choiceVultrVps10](/linux/build-misskey-in-vultr/choiceVultrVps10.png)
 
 インストールが終了したら、VPS の構築は完了
 
 <Callout type="info" emoji="️ℹ️">
   DNS の設定のため、`IP Address` と `IPv6 Address` を確認しておく<br/>
   SSH の設定のため、root ユーザの `Password` を確認しておく
-  ![checkVpsInfo](/others/build-misskey-in-vultr/checkVpsInfo.png)
+  ![checkVpsInfo](/linux/build-misskey-in-vultr/checkVpsInfo.png)
 </Callout>
 
 ---
@@ -123,7 +123,7 @@ Cloudflare の[ダッシュボード](https://dash.cloudflare.com/)にて、左�
 
 先程購入したドメインが追加されているので、該当ドメインの **管理** を選択
 
-![dnsSetting1](/others/build-misskey-in-vultr/dnsSetting1.png)
+![dnsSetting1](/linux/build-misskey-in-vultr/dnsSetting1.png)
 
 クイックアクションの **DNS の設定を更新する** を選択
 
@@ -140,7 +140,7 @@ DNS レコードの管理画面が表示されるので、**レコードの追�
 | A      | (サブドメイン) | (VPS の IP Address) |
 | AAAA   | (サブドメイン) | (VPS の IPv6 Address)    |
 
-![dnsSetting2](/others/build-misskey-in-vultr/dnsSetting2.png)
+![dnsSetting2](/linux/build-misskey-in-vultr/dnsSetting2.png)
 
 ---
 
@@ -277,7 +277,7 @@ DNS レコードの管理画面が表示されるので、**レコードの追�
 途中で Cloudflare の API Key を要求されるが、きちんと誘導してくれるのでそれに従えば問題ない<br/>
 書かれている通り [Cloudflare のダッシュボード](https://dash.cloudflare.com/profile/api-tokens) を開いて `Global API Key` を表示、コピペすればよい
 
-![checkCloudflareApiKey](/others/build-misskey-in-vultr/checkCloudflareApiKey.png)
+![checkCloudflareApiKey](/linux/build-misskey-in-vultr/checkCloudflareApiKey.png)
 
 <Callout type="error" emoji="️🚫">
   途中で処理に失敗し、再度スクリプトを実行する場合は以下に注意する
@@ -317,31 +317,31 @@ DNS レコードの管理画面が表示されるので、**レコードの追�
 Cloudflare の[ダッシュボード](https://dash.cloudflare.com/)を開く<br/>
 左のサイドバーから R2 > 概要 を開き、**バケットの作成**を選択
 
-![createBucket1](/others/build-misskey-in-vultr/createBucket1.png)
+![createBucket1](/linux/build-misskey-in-vultr/createBucket1.png)
 
 任意のバケット名を入力して作成する
 
-![createBucket2](/others/build-misskey-in-vultr/createBucket2.png)
+![createBucket2](/linux/build-misskey-in-vultr/createBucket2.png)
 
 バケットの詳細画面を開き、S3 API を確認する
 
-![createBucket3](/others/build-misskey-in-vultr/createBucket3.png)
+![createBucket3](/linux/build-misskey-in-vultr/createBucket3.png)
 
 r2.dev アクセスを許可する<br/>
 また、**パブリック r2.dev バケット URL** を確認しておく
 
-![createBucket4](/others/build-misskey-in-vultr/createBucket4.png)
+![createBucket4](/linux/build-misskey-in-vultr/createBucket4.png)
 
 左のサイドバーから R2 > 概要 に戻り、**R2 API トークンの管理** を選択する
 
-![createR2token1](/others/build-misskey-in-vultr/createR2token1.png)
+![createR2token1](/linux/build-misskey-in-vultr/createR2token1.png)
 
 API トークンの管理画面で、**API トークンを作成する** を選択
 
 API トークンの作成画面で、任意のトークン名を入力する<br/>
 また、権限で **オブジェクトの読み取りと書き込み** を選択する
 
-![createR2token2](/others/build-misskey-in-vultr/createR2token2.png)
+![createR2token2](/linux/build-misskey-in-vultr/createR2token2.png)
 
 作成された API トークンが表示される<br/>
 S3 クライアント用の **アクセス キー ID** と **シークレット アクセス キー** を確認する
@@ -350,7 +350,7 @@ S3 クライアント用の **アクセス キー ID** と **シークレット 
   この画面は一度しか表示されないので注意
 </Callout>
 
-![createR2token3](/others/build-misskey-in-vultr/createR2token3.png)
+![createR2token3](/linux/build-misskey-in-vultr/createR2token3.png)
 
 Misskey のコントロールパネルから 設定 > オブジェクトストレージ を開く
 以下の項目を設定
@@ -368,7 +368,7 @@ Misskey のコントロールパネルから 設定 > オブジェクトスト�
 **Proxy を利用する** を **無効** に、
 **アップロード時に'public-read'を設定する** を **有効** にする
 
-![settingObjectstorage](/others/build-misskey-in-vultr/settingObjectstorage.png)
+![settingObjectstorage](/linux/build-misskey-in-vultr/settingObjectstorage.png)
 
 Misskey のドライブに画像をアップロードし、画像がボケていなければ設定は完了
 
@@ -386,7 +386,7 @@ Misskey のドライブに画像をアップロードし、画像がボケてい
    更に、設定下部の オブジェクトのライフサイクル ルール を設定する\
    任意の定期的な期間で、ファイルが順次削除されるよう設定しておく
 
-   ![lifecycleSetting](/others/build-misskey-in-vultr/lifecycleSetting.png)
+   ![lifecycleSetting](/linux/build-misskey-in-vultr/lifecycleSetting.png)
 
 2. R2 API トークンの用意
 
@@ -433,7 +433,7 @@ Misskey のドライブに画像をアップロードし、画像がボケてい
    YourProfileName には 3. で作成したプロファイル名を入力\
    YourEndpointName には 1. で確認した S3 API を入力する（`.com`以前まで）
 
-   ![S3 API sample](/others/build-misskey-in-vultr/s3api_sample.png)
+   ![S3 API sample](/linux/build-misskey-in-vultr/s3api_sample.png)
 
    ```bash filename="backup-psql-all.sh"
    #!/bin/bash
@@ -480,7 +480,7 @@ Misskey のドライブに画像をアップロードし、画像がボケてい
 （おそらく）デフォルトだとノート検索は無効になっている（負荷対策？）<br/>
 コントロールパネル > 管理 > ロール > ベースロール 内の **ノート検索の利用** を **はい** に変更する
 
-![changeSearchPermission](/others/build-misskey-in-vultr/changeSearchPermission.png)
+![changeSearchPermission](/linux/build-misskey-in-vultr/changeSearchPermission.png)
 
 ## Bonus
 
