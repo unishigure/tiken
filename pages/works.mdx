@@ -13,19 +13,36 @@
   ></object>
 </center>
 
+OBS 用の日時表示オーバーレイ
+
 配信の日時を良い感じに表示したかったので作った
 
-OBS のブラウザソースに [URL](https://clock.seanut.app/) を設定するとそのまま使える<br/>
+OBS のブラウザソースに [URL](https://clock.seanut.app/) を設定するとそのまま使える\
 本体のサイズが 320x160 なので、330x170 くらいに設定すると良い感じに隙間が出来ておすすめ
 
 - [Github](https://github.com/unishigure/obs-clock-overlay)
 
 ## [gCal CSV Generator](https://gcal-csv-generator.vercel.app/)
 
-Google Calendar の予定を一括で登録したいことがあったので作った<br/>
+Google Calendar へのインポート用 CSV を作成するための文字列をコピペ出来るツール
+
+予定を一括で登録したいことがあったので作った\
 暇なときにもっとマトモに使えるものにしたいとは思っている
 
-使い方がわからんので明記しろと~~恐喝~~レビューされたため、Usage を追加した<br/>
-たしかに
+使い方がわからんので明記しろとレビューいただいたため、Usage を追加した\
+たしかにね
 
 - [Github](https://github.com/unishigure/gcal-csv-generator)
+
+## [Sleep Notifier Bot](https://mi.seanut.app/@Snorlax_bot)
+
+カビゴンのごはん時間と、[ポケモンスリープ](https://www.pokemonsleep.net/)の[ニュースフィード](https://www.pokemonsleep.net/news/feed/)を通知する Misskey Bot
+
+サーバーサイド処理しかないのに全てが TypeScript で書かれている怪作\
+カビゴンのお昼ごはんをどうしても忘れるので、寝ずに作った\
+ニュースフィードはおまけ
+
+Python で作った方が良かったと思うし、コンパイルしないまま [tsx](https://github.com/esbuild-kit/tsx) によって動かされている\
+いつか作り直す気分になったら作り直す　かもしれない
+
+- [Github](https://github.com/unishigure/sleep-notifier-bot#sleep-notifier-bot)
