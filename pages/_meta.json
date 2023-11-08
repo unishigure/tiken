@@ -8,5 +8,6 @@
   "java": "Java",
   "linux": "Linux",
   "vscode": "VSCode",
+  "misskey": "Misskey",
   "others": "Others"
 }
