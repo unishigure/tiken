@@ -9,6 +9,10 @@ PC/スマートフォンのどちらでも利用可
 
 1. 以下のテキストを全てコピーし、任意のブラウザにてブックマークの URL に登録（ブックマーク名は任意）
 
+    ```js
+    javascript:(function(){var w=600,h=400;window.open("https://mi.seanut.app/share?text="+encodeURIComponent(document.title)+" "+encodeURIComponent(location.href),"_blank","width="+w+",height="+h+",left="+(screen.width-w)/2*3+",top="+(screen.height-h)/2*3+",scrollbars=yes,resizable=yes,toolbar=no,location=yes")})()
+    ```
+
    ![Add Bookmark](/misskey/share-to-misskey-bookmarklet/add_bookmark.webp)
 
 2. 共有したいページを開いた状態で、作成したブックマークを選択
@@ -17,10 +21,6 @@ PC/スマートフォンのどちらでも利用可
    ![Shere Window](/misskey/share-to-misskey-bookmarklet/shere_window.png)
 
 4. 自由に追記して、投稿！
-
-```js
-javascript:(function(){var w=600,h=400;window.open("https://mi.seanut.app/share?text="+encodeURIComponent(document.title)+" "+encodeURIComponent(location.href),"_blank","width="+w+",height="+h+",left="+(screen.width-w)/2*3+",top="+(screen.height-h)/2*3+",scrollbars=yes,resizable=yes,toolbar=no,location=yes")})()
-```
 
 ## Source
 
