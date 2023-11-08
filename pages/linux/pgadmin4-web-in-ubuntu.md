@@ -84,7 +84,7 @@ Misskey を [install shell script](https://misskey-hub.net/docs/install/bash.htm
    ```bash
    sudo nano /home/misskey/misskey/.config/default.yml
    ```
-****
+
 ## Ref
 
 - [pgAdmin 4 (APT)](https://www.pgadmin.org/download/pgadmin-4-apt/)
