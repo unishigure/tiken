@@ -1,0 +1,27 @@
+# Misskey に URL を共有するブックマークレット
+
+自鯖 [Mi.seanut](https://mi.seanut.app/) に簡単に URL を共有するノートを投稿できるブックマークの作り方\
+ドメイン部分(`mi.seanut.app`)を変更すれば、どの Misskey でも利用できる
+
+PC/スマートフォンのどちらでも利用可
+
+## HowTo
+
+1. 以下のテキストを全てコピーし、任意のブラウザにてブックマークの URL に登録（ブックマーク名は任意）
+
+   ![Add Bookmark](/misskey/share-to-misskey-bookmarklet/add_bookmark.webp)
+
+2. 共有したいページを開いた状態で、作成したブックマークを選択
+3. ページのタイトルと URL が入力された状態で、共有ウィンドウが開く
+
+   ![Shere Window](/misskey/share-to-misskey-bookmarklet/shere_window.png)
+
+4. 自由に追記して、投稿！
+
+```js
+javascript:(function(){var w=600,h=400;window.open("https://mi.seanut.app/share?text="+encodeURIComponent(document.title)+" "+encodeURIComponent(location.href),"_blank","width="+w+",height="+h+",left="+(screen.width-w)/2*3+",top="+(screen.height-h)/2*3+",scrollbars=yes,resizable=yes,toolbar=no,location=yes")})()
+```
+
+## Source
+
+- [表示中のページを misskey.io に投稿する bookmarklet | Misskey.io](https://misskey.io/@zk_phi/pages/1676891479186)
