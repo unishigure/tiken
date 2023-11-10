@@ -1,14 +1,4 @@
-import { Callout } from "nextra/components";
-
 # Nextra で Docs サイトを作る
-
-<Callout type="error" emoji="️🚫">
-  現在、ローカル環境だと以下のエラーとなる　原因不明\
-  Vercel 上では正常に動作する
-  ```text
-  InvalidCharacterError: Failed to execute 'add' on 'DOMTokenList': The token provided ('...') contains HTML space characters, which are not valid in tokens.
-  ```
-</Callout>
 
 最小構成の [Nextra](https://nextra.site/) を [Github](https://github.com/) 経由で [Vercel](https://vercel.com/) にデプロイする
 
@@ -96,8 +86,9 @@ export default {
   project: {
     link: "https://github.com/<<GITHUB_USERNAME>>/<<PROJECT_NAME>>/",
   },
-  docsRepositoryBase: "https://github.com/<<GITHUB_USERNAME>>/<<PROJECT_NAME>>/tree/<<DEPLOY_BRANCH>>/",
-// ... other theme options
+  docsRepositoryBase:
+    "https://github.com/<<GITHUB_USERNAME>>/<<PROJECT_NAME>>/tree/<<DEPLOY_BRANCH>>/",
+  // ... other theme options
 };
 ```
 
@@ -150,6 +141,22 @@ Vercel のキャッシュの問題らしく、以下の手順で反映させる�
 
 - [Old Sidebar is shown in the page until the page is updated manually - feedback for the team · Issue #1806 · shuding/nextra](https://github.com/shuding/nextra/issues/1806)
 - [Vercel caching issue · Issue #1564 · shuding/nextra](https://github.com/shuding/nextra/issues/1564)
+
+### InvalidCharacterError: Failed to execute 'add' on 'DOMTokenList'
+
+以下のクソ長いエラーのため、Local 環境でエラーが発生した\
+原因は localhost:3000 のローカルストレージに theme values が保存されていたこと（いつの間に）
+
+Chrome の開発者ツールから\
+アプリケーション > ストレージ > ローカルストレージ > `http://localhost:3000`\
+を右クリックし **消去** することで解決
+
+```text
+Unhandled Runtime Error
+InvalidCharacterError: Failed to execute 'add' on 'DOMTokenList': The token provided ('{"accent":"rgb(113, 136, 217)","accentDarken":"rgb(73, 102, 206)","accentLighten":"rgb(153, 170, 228)","accentedBg":"rgba(113, 136, 217, 0.15)","focus":"rgba(113, 136, 217, 0.3)","bg":"rgb(32, 34, 37)","acrylicBg":"rgba(32, 34, 37, 0.5)","fg":"rgb(228, 228, 228)","fgTransparentWeak":"rgba(228, 228, 228, 0.75)","fgTransparent":"rgba(228, 228, 228, 0.5)","fgHighlighted":"rgb(255, 255, 255)","fgOnAccent":"rgb(255, 255, 255)","fgOnWhite":"rgb(51, 51, 51)","divider":"rgba(255, 255, 255, 0.1)","indicator":"rgb(113, 136, 217)","panel":"rgb(54, 57, 63)","panelHighlight":"rgb(61, 64, 71)","panelHeaderBg":"rgb(61, 64, 71)","panelHeaderFg":"rgb(228, 228, 228)","panelHeaderDivider":"rgba(0, 0, 0, 0)","panelBorder":"solid 1px var(--divider)","acrylicPanel":"rgba(54, 57, 63, 0.5)","windowHeader":"rgba(54, 57, 63, 0.85)","popup":"rgb(61, 64, 71)","shadow":"rgba(0, 0, 0, 0.3)","header":"rgb(47, 49, 54)","navBg":"rgb(47, 49, 54)","navFg":"rgb(142, 146, 151)","navHoverFg":"rgb(220, 221, 222)","navActive":"rgb(255, 255, 255)","navIndicator":"rgb(113, 136, 217)","link":"rgb(0, 176, 244)","hashtag":"rgb(113, 136, 217)","mention":"rgb(113, 136, 217)","mentionMe":"rgb(113, 136, 217)","renote":"rgb(67, 181, 129)","modalBg":"rgba(0, 0, 0, 0.5)","scrollbarHandle":"rgb(32, 34, 37)","scrollbarHandleHover":"rgba(255, 255, 255, 0.4)","dateLabelFg":"rgb(228, 228, 228)","infoBg":"rgb(37, 49, 66)","infoFg":"rgb(255, 255, 255)","infoWarnBg":"rgb(66, 50, 28)","infoWarnFg":"rgb(255, 189, 62)","switchBg":"rgba(255, 255, 255, 0.15)","buttonBg":"rgba(255, 255, 255, 0.05)","buttonHoverBg":"rgba(255, 255, 255, 0.1)","buttonGradateA":"rgb(113, 136, 217)","buttonGradateB":"rgb(125, 113, 217)","switchOffBg":"rgba(255, 255, 255, 0.1)","switchOffFg":"rgba(228, 228, 228, 0.8)","switchOnBg":"rgba(113, 136, 217, 0.15)","switchOnFg":"rgb(113, 136, 217)","inputBorder":"rgba(255, 255, 255, 0.1)","inputBorderHover":"rgba(255, 255, 255, 0.2)","listItemHoverBg":"rgba(255, 255, 255, 0.03)","driveFolderBg":"rgba(113, 136, 217, 0.3)","wallpaperOverlay":"rgba(0, 0, 0, 0.5)","badge":"rgb(49, 177, 206)","messageBg":"rgb(32, 34, 37)","success":"rgb(134, 179, 0)","error":"rgb(236, 65, 55)","warn":"rgb(236, 182, 55)","codeString":"rgb(255, 182, 117)","codeNumber":"rgb(207, 255, 158)","codeBoolean":"rgb(197, 158, 255)","deckBg":"rgb(0, 0, 0)","htmlThemeColor":"rgb(32, 34, 37)","X2":"rgb(49, 52, 58)","X3":"rgba(255, 255, 255, 0.05)","X4":"rgba(255, 255, 255, 0.1)","X5":"rgba(255, 255, 255, 0.05)","X6":"rgba(255, 255, 255, 0.15)","X7":"rgba(255, 255, 255, 0.05)","X8":"rgb(133, 153, 222)","X9":"rgb(93, 119, 212)","X10":"rgba(113, 136, 217, 0.4)","X11":"rgba(0, 0, 0, 0.3)","X12":"rgba(255, 255, 255, 0.1)","X13":"rgba(255, 255, 255, 0.15)","X14":"rgba(47, 49, 54, 0.5)","X15":"rgba(54, 57, 63, 0)","X16":"rgba(54, 57, 63, 0.7)","X17":"rgba(32, 34, 37, 0.8)"}') contains HTML space characters, which are not valid in tokens.
+```
+
+- [XユーザーのNadiaさん: 「Wondering why I'm getting this error when running Nextra docs template on local. I haven't modified anything. It runs in production. Then I remember I stored theme values in local storage for my personal site. Turns out deleting local storage data is the solution ¯\(ツ)/¯」 / X](https://twitter.com/nadiannis/status/1672962849562570753)
 
 ## Ref
 
