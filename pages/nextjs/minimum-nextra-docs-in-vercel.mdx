@@ -1,0 +1,160 @@
+import { Callout } from "nextra/components";
+
+# Nextra で Docs サイトを作る
+
+<Callout type="error" emoji="️🚫">
+  現在、ローカル環境だと以下のエラーとなる　原因不明\
+  Vercel 上では正常に動作する
+  ```text
+  InvalidCharacterError: Failed to
+  execute 'add' on 'DOMTokenList': The token provided ('...') contains HTML
+  space characters, which are not valid in tokens.
+  ```
+</Callout>
+
+最小構成の [Nextra](https://nextra.site/) を [Github](https://github.com/) 経由で [Vercel](https://vercel.com/) にデプロイする
+
+## Flow
+
+### リポジトリの作成
+
+（`pnpm`をインストール）
+
+```ps
+npm i -g pnpm
+```
+
+プロジェクトディレクトリを作成
+
+```ps
+ni <<PROJECT_NAME>> -type dir
+```
+
+```ps
+cd <<PROJECT_NAME>>
+```
+
+Git を初期化
+
+```ps
+git init
+```
+
+`.gitignore` を作成
+
+```ps
+ni .gitignore
+```
+
+```.gitignore filename=".gitignore"
+.git
+.next
+node_modules
+```
+
+パッケージをインストール
+
+```ps
+pnpm add next react react-dom nextra nextra-theme-docs
+```
+
+作成された `package.json` に `scripts` を追記
+
+```json filename="package.json"
+"scripts": {
+  "dev": "next",
+  "build": "next build",
+  "start": "next start"
+},
+```
+
+`next.config.js` を作成
+
+```ps
+ni next.config.js
+```
+
+```js filename="next.config.js"
+const withNextra = require("nextra")({
+  theme: "nextra-theme-docs",
+  themeConfig: "./theme.config.jsx",
+});
+
+module.exports = withNextra();
+
+// If you have other Next.js configurations, you can pass them as the parameter:
+// module.exports = withNextra({ /* other next.js config */ })
+```
+
+`theme.config.jsx` を作成
+
+```ps
+ni theme.config.jsx
+```
+
+```jsx filename="theme.config.jsx"
+export default {
+  logo: <span>My Nextra Documentation</span>,
+  project: {
+    link: "https://github.com/<<GITHUB_USERNAME>>/<<PROJECT_NAME>>/",
+  },
+  docsRepositoryBase: "https://github.com/<<GITHUB_USERNAME>>/<<PROJECT_NAME>>/tree/<<DEPLOY_BRANCH>>/",
+// ... other theme options
+};
+```
+
+index ページを追加
+
+```ps
+ni pages/index.mdx -force
+```
+
+```mdx filename="pages/index.mdx"
+# Welcome to Nextra
+
+Hello, world!
+```
+
+リポジトリを Github へプッシュ
+
+```ps
+git add *
+git commit -m "first commit"
+```
+
+### Vercel へのデプロイ
+
+[Vercel](https://vercel.com/) にログインする
+
+Add new project を選択する\
+Import Git Repository で 作成したリポジトリを選択する\
+Deploy をクリックして開始
+
+Deploy が完了したら、作成されたプロジェクトの Settings を開く\
+Environment Variables を開き、以下の環境変数を追加する\
+ディープクローンされるようになり、各記事の更新日時が Git のコミット日時から取得・表示される
+
+| Key               | Value |
+| ----------------- | ----- |
+| VERCEL_DEEP_CLONE | true  |
+
+## Note
+
+### `_meta.json` を更新しても反映されない
+
+`_meta.json` を更新して、サイドバーに表示される記事の順序を変更しようとしても、反映されない場合がある\
+Vercel のキャッシュの問題らしく、以下の手順で反映させることができる
+
+1. 更新内容を GitHub に Push 後、自動デプロイの完了を待つ
+2. Vercel の Deployments から最新コミットの `Redeploy` を選択し、`​Use existing Build Cache` のチェックを**外して**開始する
+
+根本的な解決には至っていない模様
+
+- [Old Sidebar is shown in the page until the page is updated manually - feedback for the team · Issue #1806 · shuding/nextra](https://github.com/shuding/nextra/issues/1806)
+- [Vercel caching issue · Issue #1564 · shuding/nextra](https://github.com/shuding/nextra/issues/1564)
+
+## Ref
+
+- [Docs Theme - Nextra](https://nextra.site/docs/docs-theme/start)
+- [New-Item (Microsoft.PowerShell.Management) - PowerShell | Microsoft Learn](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/new-item)
+- [2023/10/2 15:14:39 のノート | Misskey.io](https://misskey.io/notes/9kc28mo8sk)
