@@ -119,15 +119,24 @@ git commit -m "first commit"
 `Import Git Repository` で 作成したリポジトリを選択する\
 `Deploy` をクリックして開始
 
-Deploy が完了したら、作成されたプロジェクトの `Settings` を開く\
+何事もなく完了すれば、デプロイは成功🎉
+
+## Note
+
+### ページの更新日時が表示されない
+
+更新から数日経ったページなどで、gitTimestamp が付与されなくなることがある\
+デフォルトでは shallow clone されることが原因
+
+Vercel に作成されたプロジェクトの `Settings` を開く\
 `Environment Variables` を開き、以下の環境変数を追加する\
-ディープクローンされるようになり、各記事の更新日時が Git のコミット日時から取得・表示される
+deep clone されるようになり、各ページの更新日時が Git のコミット日時から取得・表示される
 
 | Key               | Value |
 | ----------------- | ----- |
 | VERCEL_DEEP_CLONE | true  |
 
-## Note
+- [2023/10/2 15:14:39 のノート | Misskey.io](https://misskey.io/notes/9kc28mo8sk)
 
 ### `_meta.json` を更新しても反映されない
 
@@ -162,4 +171,3 @@ InvalidCharacterError: Failed to execute 'add' on 'DOMTokenList': The token prov
 
 - [Docs Theme - Nextra](https://nextra.site/docs/docs-theme/start)
 - [New-Item (Microsoft.PowerShell.Management) - PowerShell | Microsoft Learn](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/new-item)
-- [2023/10/2 15:14:39 のノート | Misskey.io](https://misskey.io/notes/9kc28mo8sk)
