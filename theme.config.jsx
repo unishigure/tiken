@@ -1,10 +1,9 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { DocsThemeConfig } from "nextra-theme-docs";
 
 const rootUrl = process.env.ROOT_URL ? process.env.ROOT_URL : "localhost";
 
-const config: DocsThemeConfig = {
+const config = {
   primaryHue: 5,
   primarySaturation: 85,
   logo: (
