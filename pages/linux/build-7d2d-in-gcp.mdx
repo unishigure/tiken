@@ -1,0 +1,211 @@
+# Google Cloud で 7 Days to Die サーバを構築する
+
+## Overview
+
+[Google Cloud](https://cloud.google.com/) を触ってみたいので、[試用](https://cloud.google.com/free)のため貰える $300 で [7D2D](https://store.steampowered.com/app/251570/7_Days_to_Die/) サーバを建ててみる\
+この[試用クレジット](https://cloud.google.com/free/docs/free-cloud-features)は Vultr と違って 90 日間保つ（2023/11 現在）
+
+## Architecture
+
+- 7 Days to Die ゲームバージョン
+
+  Alpha 21\
+  [リリースノート](https://7daystodie.com/a21-official-release-notes/)
+
+- Google Compute Engine VM インスタンスの構成
+
+  東京リージョンはじわ高いが今回はタダなので使っていく
+
+  ディスクサイズはデフォルトの 10GB だと、ゲームサーバのインストール時に不足エラーとなる\
+  必要なディスク容量を確認し、余裕を持って設定すること（1 敗）
+
+  [7 Days to Die 専用サーバーのシステム必要要件](https://community.7daystodie.com/topic/3998-support-faq-information-and-common-solutions/#comment-47970)
+
+  | Column               | Value                                                          |
+  | -------------------- | -------------------------------------------------------------- |
+  | リージョン           | asia-northeast1 (東京)                                         |
+  | ゾーン               | asia-northeast1-a                                              |
+  | マシンファミリー     | 汎用                                                           |
+  | シリーズ             | E2                                                             |
+  | マシンタイプ         | e2-standard-4（4 vCPU、2 コア、16 GB メモリ）                  |
+  | OS                   | Debian                                                         |
+  | OS バージョン        | Debian GNU/Linux 11 (bullseye) x86/64, amd64 built on 20231010 |
+  | ブートディスクの種類 | バランス永続ディスク                                           |
+  | ディスクサイズ       | 20GB                                                           |
+
+## Flow
+
+前提として、Google Cloud アカウントを[作成](https://console.cloud.google.com/freetrial/signup/tos)しておく
+
+### VM インスタンスの作成
+
+Google Cloud のダッシュボードを開き、\
+ナビゲーションバーから Compute Engine > VM インスタンス を選択
+
+インスタンスを作成 をクリック\
+構成を選択して、**作成**をクリック
+
+ステータスが ✓ になったら、VM の作成は完了
+
+### サーバのインストール
+
+sudo apt-get update
+sudo apt-get install xmlstarlet expect lib32gcc-s1 lib32stdc++6 make gcc
+
+sudo wget http://svn.illy.bz/7dtd/bootstrapper/bootstrap.sh
+sudo chmod +x bootstrap.sh
+
+sudo ./bootstrap.sh -i
+
+#### SteamCMD のインストール
+
+作成した VM インスタンスに接続する\
+Google Cloud の VM インスタンス一覧から、SSH を選択しブラウザコンソールを起動
+
+作業用ユーザを作成し、パスワードを設定
+
+```bash
+sudo useradd -m steam -s /bin/bash -G sudo
+sudo passwd steam
+```
+
+作成した steam ユーザに変更
+
+```bash
+sudo su - steam
+```
+
+SteamCMD をインストール
+
+```bash
+sudo add-apt-repository multiverse; sudo dpkg --add-architecture i386; sudo apt update
+```
+
+```bash
+sudo apt install steamcmd
+```
+
+#### 7d2d サーバのインストール
+
+引き続き steam ユーザで SteamCMD を起動
+
+```bash
+steamcmd
+```
+
+インストール先のディレクトリを設定
+
+```bash
+force_install_dir /home/steam/7d2d_server
+```
+
+匿名でログイン
+
+```bash
+login anonymous
+```
+
+7 Days to Die 専用サーバをインストール\
+ダウンロードに 3 万年掛かるので気長に待つ
+
+```bash
+app_update 294420
+```
+
+SteamCMD を終了
+
+```bash
+quit
+```
+
+### サーバの起動
+
+#### 7d2d サーバの設定
+
+インストールされた 7D2D のディレクトリに移動
+
+```bash
+cd /home/steam/7d2d_server
+```
+
+任意の設定に変更\
+設定一覧は[こちら](https://developer.valvesoftware.com/wiki/7_Days_to_Die_Dedicated_Server#Serverconfig.xml)（最新ではない点に注意）
+
+```bash
+nano serverconfig.xml
+```
+
+下記の設定をしておけば、Web dashboard からも設定の管理を行える はず
+
+| Option              | Values | Description                                                                                                                             |
+| ------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------- |
+| WebDashboardEnabled | true   | Enable the web dashboard                                                                                                                |
+| EnableMapRendering  | true   | Enable rendering of the map to tile images while exploring it.<br/>This is used e.g. by the web dashboard to display a view of the map. |
+
+#### ファイアウォールの設定
+
+SSH 接続に TCP `22`、\
+デフォルトで TCP の`26900`と`8081`、UDP の`26900`-`26903`を\
+Web dashboard オプションで`8080`を使うので、これらのポートを開放する
+
+```bash
+sudo ufw allow 22/tcp
+sudo ufw allow 8080:8081/tcp
+sudo ufw allow 26900/tcp
+sudo ufw allow 26900:26903/udp
+sudo ufw enable
+```
+
+```bash
+sudo ufw status
+```
+
+#### 7d2d サーバの起動
+
+サーバを起動\
+初回起動時は、ワールド作成に 3 億年かかるため気長に待つ
+
+```bash
+./startserver.sh -configfile=serverconfig.xml
+```
+
+telnet で外部から接続が成功できるようになれば、サーバ起動は完了
+
+```ps
+telnet <<VM_External_IP>> 26900
+```
+
+Web Control Panel オプションを有効にしていた場合、\
+以下のアドレスで外部から Web Control Panel に接続できることを確認する
+
+```text
+http://<<VM_External_IP>>:8080/
+```
+
+ゲームクライアントで ゲームに参加する > IP に接続 から、\
+VM インスタンスの **外部 IP** と、**ポート**(デフォルトは`26900`)を設定し、\
+クライアントからサーバに接続できるようにする
+
+## Afterword
+
+Google Cloud で構築されているゲームサーバの記事をあまり見ないが、そもそもこの用途ではプッシュされていないのでこんなものなのかもしれない\
+流石専用サーバの定番というべきか、Minecraft の記事はいくつか見つかった
+
+確かに安くはないが、Vultr と同じく従量課金制なので雑に作って壊してがしやすいのは嬉しいポイント\
+国産 VPS は従量課金制があまり流行ってない印象 流行って
+
+Vultr の方が安いっぽいが、Vultr はドライブ容量だけ増やすみたいなことができないので悩みどころ\
+Vultr は手軽に安く作れるが、必要スペックを細かく設定するなら Google Cloud の方が安くなる、というパターンがある か？
+
+## Ref
+
+- [7 Days to Die - Linux Server Management](https://7dtd.illy.bz/wiki)
+
+- [SteamCMD - Valve Developer Community](https://developer.valvesoftware.com/wiki/SteamCMD)
+- [7 Days to Die Dedicated Server - Valve Developer Community](https://developer.valvesoftware.com/wiki/7_Days_to_Die_Dedicated_Server)
+- [7Days To Die Ubuntu を用いたサーバの建て方 気まま研究所](https://kimamalab.azurewebsites.net/SevenDays/BuildServerUbuntu#Fixes_ChangeMapPermission)
+- [GCP で無料の Minecraft サーバを立ててみた](https://zenn.dev/okayuuuuu/articles/034777523c33fa)
+- [SIGSEGV - Bug Pool - 7 Days to Die](https://community.7daystodie.com/a21-bugs-main/bug-pool/sigsegv-r678/)
+- [ufw で複数ポートを許可する設定をするには | エクセルソフト ブログ](https://www.xlsoft.com/jp/blog/blog/2018/03/07/post-3324-post-3324/)
+- [7 Days to Die サーバーをインストール (Ubuntu 18.04 LTS) | ほげぴよ.com](https://www.hogepiyo.com/wp/?p=1396)
+- [Linux でユーザー追加（adduser/useradd） | Ryoma's Blog](https://from.ri2lab.com/posts/530/)
