@@ -1,0 +1,190 @@
+# 7 Days to Die 専用サーバ 設定一覧
+
+7 Days to Die の **Alpha 21.1** 時点での `serverconfig.xml` の概要一覧\
+詳細は実際の `serverconfig.xml` を確認すること
+
+## サーバ設定全般
+
+### サーバ情報
+
+| Option                      | Value                  | Description                                |
+| --------------------------- | ---------------------- | ------------------------------------------ |
+| ServerName                  | My Game Host           | サーバ名                                   |
+| ServerDescription           | A 7 Days to Die server | サーバ説明                                 |
+| ServerWebsiteURL            |                        | サーバのウェブサイト URL                   |
+| ServerPassword              |                        | サーバに接続するためのパスワード           |
+| ServerLoginConfirmationText |                        | サーバへの参加時に表示される確認ウィンドウ |
+| Region                      | NorthAmericaEast       | サーバのリージョン                         |
+| Language                    | English                | サーバの主要言語                           |
+
+### ネットワーク
+
+| Option                          | Value           | Description                                                      |
+| ------------------------------- | --------------- | ---------------------------------------------------------------- |
+| ServerPort                      | 26900           | サーバのポート                                                   |
+| ServerVisibility                | 2               | サーバの可視性<br/>2→ 公開、1→ フレンドのみ、0→ 非公開           |
+| ServerDisabledNetworkProtocols  | SteamNetworking | 無効化されるネットワークプロトコル                               |
+| ServerMaxWorldTransferSpeedKiBs | 512             | サーバへの初回接続時、ワールドがクライアントに転送される最大速度 |
+
+### スロット
+
+| Option                        | Value | Description                                                                           |
+| ----------------------------- | ----- | ------------------------------------------------------------------------------------- |
+| ServerMaxPlayerCount          | 8     | 最大同時接続プレイヤー数                                                              |
+| ServerReservedSlots           | 0     | ServerMaxPlayerCount のうち、特定の権限レベルを持つプレイヤーのみが使用するスロット数 |
+| ServerReservedSlotsPermission | 100   | ServerReservedSlots を使用するために必要な権限レベル                                  |
+| ServerAdminSlots              | 0     | ServerMaxPlayerCount を超えて接続できる管理者のスロット数                             |
+| ServerAdminSlotsPermission    | 0     | ServerAdminSlots を使用するために必要な権限レベル                                     |
+
+### 管理インターフェース
+
+| Option              | Value | Description                   |
+| ------------------- | ----- | ----------------------------- |
+| WebDashboardEnabled | false | Web dashboard の有効/無効     |
+| WebDashboardPort    | 8080  | Web dashboard のポート        |
+| WebDashboardUrl     |       | Web dashboard の外部 URL      |
+| EnableMapRendering  | false | マップレンダリングの有効/無効 |
+
+| Option                      | Value | Description                                                              |
+| --------------------------- | ----- | ------------------------------------------------------------------------ |
+| TelnetEnabled               | true  | Telnet の有効/無効                                                       |
+| TelnetPort                  | 8081  | Telnet のポート                                                          |
+| TelnetPassword              |       | Telnet にアクセスするためのパスワード                                    |
+| TelnetFailedLoginLimit      | 10    | ログインに失敗した際、接続がブロックされるまでのパスワード入力の失敗回数 |
+| TelnetFailedLoginsBlocktime | 10    | ブロックの持続秒数                                                       |
+
+| Option                | Value | Description                                                         |
+| --------------------- | ----- | ------------------------------------------------------------------- |
+| TerminalWindowEnabled | true  | ログ出力/コマンド入力用のターミナルウィンドウを表示（Windows のみ） |
+
+### ファイルロケーション
+
+| Option         | Value           | Description                                            |
+| -------------- | --------------- | ------------------------------------------------------ |
+| AdminFileName  | serveradmin.xml | サーバー管理ファイル名<br/>SaveGameFolder との相対パス |
+| UserDataFolder |                 | ユーザデータフォルダの絶対パス                         |
+| SaveGameFolder |                 | セーブゲームフォルダの絶対パス                         |
+
+### その他の技術的な設定
+
+| Option                         | Value  | Description                                                                                                                              |
+| ------------------------------ | ------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| EACEnabled                     | true   | EasyAntiCheat の有効/無効                                                                                                                |
+| HideCommandExecutionLog        | 0      | コマンド実行ログを非表示にする<br/>0→ 全て表示、1→Telnet/ControlPanel のみ非表示、2→ リモートゲームクライアントでも非表示、3→ 全て非表示 |
+| MaxUncoveredMapChunksPerPlayer | 131072 | プレイヤー毎にゲーム内マップで発見できるチャンク数を上書き                                                                               |
+| PersistentPlayerProfiles       | false  | 無効の場合、プレイヤーは選択したプロファイルで接続できる<br/>有効の場合、最後に利用したプロファイルで接続される                          |
+
+## ゲームプレイ関連
+
+### ワールド
+
+| Option       | Value            | Description                                                                       |
+| ------------ | ---------------- | --------------------------------------------------------------------------------- |
+| GameWorld    | Navezgane        | `RWG` または Worlds フォルダー内の既存のワールド名（`Navezgane`, `REGEN01` など） |
+| WorldGenSeed | asdf             | GameWorld が `RWG` の場合の、シード値                                             |
+| WorldGenSize | 4096             | GameWorld が `RWG` の場合の、ワールドの幅と高さ                                   |
+| GameName     | My Game          | ゲーム名　シードに影響する                                                        |
+| GameMode     | GameModeSurvival | ゲームモード　サバイバル                                                          |
+
+### 難易度
+
+| Option              | Value | Description                                                                    |
+| ------------------- | ----- | ------------------------------------------------------------------------------ |
+| GameDifficulty      | 1     | ゲーム難易度<br/>易 ← 0 - 5 → 難                                               |
+| BlockDamagePlayer   | 100   | プレイヤーがブロックに与えるダメージの割合                                     |
+| BlockDamageAI       | 100   | AI がブロックに与えるダメージの割合                                            |
+| BlockDamageAIBM     | 100   | ブラッドムーン中に AI がブロックに与えるダメージの割合                         |
+| XPMultiplier        | 100   | 経験値乗数（整数での％）                                                       |
+| PlayerSafeZoneLevel | 5     | プレイヤーがこのレベル以下の場合、スポーン時に敵のいないセーフゾーンを生成する |
+| PlayerSafeZoneHours | 5     | セーフゾーンが存在する世界時間                                                 |
+
+### （カテゴリなし）
+
+| Option              | Value | Description                                                                                            |
+| ------------------- | ----- | ------------------------------------------------------------------------------------------------------ |
+| BuildCreate         | false | チートモードの有効/無効                                                                                |
+| DayNightLength      | 60    | ゲーム内 1 日あたりのリアルタイム時間（分）                                                            |
+| DayLightLength      | 18    | ゲーム内 1 日あたりの日照時間                                                                          |
+| DropOnDeath         | 1     | 死亡時のドロップ<br/>0→ なし、1→ すべて、2→ ツールベルトのみ、3→ バックパックのみ、4→ すべて削除       |
+| DropOnQuit          | 0     | ゲーム終了時のドロップ<br/>0→ なし、1→ すべて、2→ ツールベルトのみ、3→ バックパックのみ、4→ すべて削除 |
+| BedrollDeadZoneSize | 15    | ゾンビが出現しないベッドロールデッドゾーンの半径                                                       |
+| BedrollExpiryTime   | 45    | 所有者が最後にオンラインになってから、ベッドロールがアクティブなままでいるリアルタイム日数             |
+
+### パフォーマンス関連
+
+| Option                       | Value | Description                                                                |
+| ---------------------------- | ----- | -------------------------------------------------------------------------- |
+| MaxSpawnedZombies            | 64    | マップ全体に同時に存在できるゾンビの数                                     |
+| MaxSpawnedAnimals            | 50    | マップ全体に同時に存在できる動物の数                                       |
+| ServerMaxAllowedViewDistance | 12    | クライアントが要求できる最大表示距離                                       |
+| MaxQueuedMeshLayers          | 1000  | メッシュ生成中にキューに入れることができるチャンクメッシュレイヤーの最大数 |
+
+### ゾンビ設定
+
+| Option              | Value | Description                                                                        |
+| ------------------- | ----- | ---------------------------------------------------------------------------------- |
+| EnemySpawnMode      | true  | 敵の出現の有効/無効                                                                |
+| EnemyDifficulty     | 0     | 敵の難易度<br/>0→Normal, 1→Feral                                                   |
+| ZombieFeralSense    | 0     | Feral ゾンビの感知能力が上がる時間<br/>0-3（オフ、日、夜、すべて）                 |
+| ZombieMove          | 0     | ゾンビの日中の移動速度<br/>0-4（歩き、早歩き、走る、全力疾走、最高速）             |
+| ZombieMoveNight     | 3     | ゾンビの夜間の移動速度<br/>0-4（歩き、早歩き、走る、全力疾走、最高速）             |
+| ZombieFeralMove     | 3     | Feral ゾンビの移動速度<br/>0-4（歩き、早歩き、走る、全力疾走、最高速）             |
+| ZombieBMMove        | 3     | ブラッドムーン時のゾンビの移動速度<br/>0-4（歩き、早歩き、走る、全力疾走、最高速） |
+| BloodMoonFrequency  | 7     | ブラッドムーンの頻度                                                               |
+| BloodMoonRange      | 0     | ブラッドムーンがランダムにずれる範囲                                               |
+| BloodMoonWarning    | 8     | ブラッドムーンの日が赤く表示され始める時間                                         |
+| BloodMoonEnemyCount | 8     | ブラッドムーン中のゾンビの数                                                       |
+
+### 戦利品
+
+| Option           | Value | Description                                            |
+| ---------------- | ----- | ------------------------------------------------------ |
+| LootAbundance    | 100   | 戦利品の量（％）                                       |
+| LootRespawnDays  | 7     | 戦利品がリスポーンする日数                             |
+| AirDropFrequency | 72    | エアドロップの頻度（ゲーム内時間）                     |
+| AirDropMarker    | true  | エアドロップの位置をマップやコンパスに表示するかどうか |
+
+### マルチプレイヤー
+
+| Option               | Value | Description                                                               |
+| -------------------- | ----- | ------------------------------------------------------------------------- |
+| PartySharedKillRange | 100   | パーティでの経験値共有距離                                                |
+| PlayerKillingMode    | 3     | プレイヤーキル設定<br/>0→ 殺害なし、1→ 味方のみ、2→ 他人のみ、3→ 全員殺害 |
+
+### 土地主張オプション
+
+| Option                             | Value | Description                                                                                              |
+| ---------------------------------- | ----- | -------------------------------------------------------------------------------------------------------- |
+| LandClaimCount                     | 3     | プレイヤーごとに許可される土地主張ブロックの最大数                                                       |
+| LandClaimSize                      | 41    | 土地主張ブロックで保護されるサイズ（ブロック単位）                                                       |
+| LandClaimDeadZone                  | 30    | 土地主張ブロック同士の離れていなければならない距離（フレンドでないプレイヤー間）                         |
+| LandClaimExpiryTime                | 7     | 最後にオンラインになってからの土地主張ブロックの有効日数                                                 |
+| LandClaimDecayMode                 | 0     | オフラインプレイヤーの土地主張の減衰<br/>0→ 遅い（線形的）、1→ 早い（指数関数的）、2→ なし               |
+| LandClaimOnlineDurabilityModifier  | 4     | 土地主張者がオンライン時、ブロック硬度がどれだけ増加するか                                               |
+| LandClaimOfflineDurabilityModifier | 4     | 土地主張者がオフライン時、ブロック硬度がどれだけ増加するか                                               |
+| LandClaimOfflineDelay              | 0     | プレイヤーがログアウトしてから、ブロック硬度がオンライン倍率からオフライン倍率に移行するまでの時間（分） |
+
+## その他
+
+ダイナミックメッシュ
+
+| Option                     | Value | Description                                                   |
+| -------------------------- | ----- | ------------------------------------------------------------- |
+| DynamicMeshEnabled         | true  | ダイナミックメッシュの有効/無効                               |
+| DynamicMeshLandClaimOnly   | true  | ダイナミックメッシュがプレイヤー LCB エリアでのみ有効かどうか |
+| DynamicMeshLandClaimBuffer | 3     | ダイナミックメッシュ LCB チャンクの半径                       |
+| DynamicMeshMaxItemCache    | 3     | 同時に処理できるアイテムの数                                  |
+
+[Twitch 連携](https://7daystodie.com/wp-content/uploads/2021/05/Twitch_Integration_V1-2.pdf)機能
+
+| Option                 | Value | Description                                            |
+| ---------------------- | ----- | ------------------------------------------------------ |
+| TwitchServerPermission | 90    | Twitch 連携を使用するために必要な権限レベル            |
+| TwitchBloodMoonAllowed | false | ブラッドムーン中に Twitch アクションを許可するかどうか |
+
+システム
+
+| Option        | Value | Description                                  |
+| ------------- | ----- | -------------------------------------------- |
+| MaxChunkAge   | -1    | チャンクがリセットされるまでのゲーム内日数   |
+| SaveDataLimit | -1    | セーブデータごとの許容最大ディスク容量（MB） |
