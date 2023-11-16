@@ -1,5 +1,7 @@
 # Google Cloud で 7 Days to Die サーバを構築する
 
+VPC ファイアウォールむずすぎ
+
 ## Overview
 
 [Google Cloud](https://cloud.google.com/) を触ってみたいので、[試用](https://cloud.google.com/free)のため貰える $300 で [7D2D](https://store.steampowered.com/app/251570/7_Days_to_Die/) サーバを建ててみる\
@@ -9,15 +11,12 @@
 
 - 7 Days to Die ゲームバージョン
 
-  Alpha 21\
+  Alpha 21.1 (b16)\
   [リリースノート](https://7daystodie.com/a21-official-release-notes/)
 
 - Google Compute Engine VM インスタンスの構成
 
   東京リージョンはじわ高いが今回はタダなので使っていく
-
-  ディスクサイズはデフォルトの 10GB だと、ゲームサーバのインストール時に不足エラーとなる\
-  必要なディスク容量を確認し、余裕を持って設定すること（1 敗）
 
   [7 Days to Die 専用サーバーのシステム必要要件](https://community.7daystodie.com/topic/3998-support-faq-information-and-common-solutions/#comment-47970)
 
@@ -28,34 +27,56 @@
   | マシンファミリー     | 汎用                                                           |
   | シリーズ             | E2                                                             |
   | マシンタイプ         | e2-standard-4（4 vCPU、2 コア、16 GB メモリ）                  |
-  | OS                   | Debian                                                         |
-  | OS バージョン        | Debian GNU/Linux 11 (bullseye) x86/64, amd64 built on 20231010 |
+  | OS                   | Ubuntu                                                         |
+  | OS バージョン        | Ubuntu 22.04 LTS x86/64, amd64 jammy image built on 2023-10-30 |
   | ブートディスクの種類 | バランス永続ディスク                                           |
   | ディスクサイズ       | 20GB                                                           |
 
 ## Flow
 
-前提として、Google Cloud アカウントを[作成](https://console.cloud.google.com/freetrial/signup/tos)しておく
+前提として、Google Cloud アカウントが[作成](https://console.cloud.google.com/freetrial/signup/tos)されていること
 
-### VM インスタンスの作成
+[Google Cloud Console](https://console.cloud.google.com/) を開き、任意の名称でプロジェクトを作成し、Compute Engine API を有効化しておく
 
-Google Cloud のダッシュボードを開き、\
-ナビゲーションバーから Compute Engine > VM インスタンス を選択
+### 仮想マシンの作成
 
-インスタンスを作成 をクリック\
-構成を選択して、**作成**をクリック
+#### VPC ファイアウォールルールの追加
+
+接続に必要な FW ルールを用意しておく
+
+[Google Cloud Console](https://console.cloud.google.com/) の検索窓から **VPC ネットワーク** を選択\
+**default** ネットワークに以下の FW ルールを追加
+
+| Column                   | Value                      |
+| ------------------------ | -------------------------- |
+| 名前                     | 任意のルール名             |
+| トラフィックの方向       | 上り                       |
+| 一致したときのアクション | 許可                       |
+| ターゲット               | 指定されたターゲットタグ   |
+| ターゲットタグ           | 任意のタグ名               |
+| ソースフィルタ           | IPv4 範囲                  |
+| 送信元 IPv4 範囲         | 0.0.0.0/0                  |
+| プロトコルとポート       | 指定したプロトコルとポート |
+| TCP                      | 8080-8082, 26900           |
+| UDP                      | 26900-26903                |
+
+#### VM インスタンスの作成
+
+Compute Engine > **VM インスタンス** を選択
+
+**インスタンスを作成** をクリック\
+[構成](#architecture) を選択
+
+ブートディスクの変更から、OS とディスク容量を変更
+
+詳細オプション > ネットワーキング > **ネットワークタグ** に、\
+FW ルールにターゲットタグとして設定した **タグ名** を設定
+
+**作成**をクリック
 
 ステータスが ✓ になったら、VM の作成は完了
 
 ### サーバのインストール
-
-sudo apt-get update
-sudo apt-get install xmlstarlet expect lib32gcc-s1 lib32stdc++6 make gcc
-
-sudo wget http://svn.illy.bz/7dtd/bootstrapper/bootstrap.sh
-sudo chmod +x bootstrap.sh
-
-sudo ./bootstrap.sh -i
 
 #### SteamCMD のインストール
 
@@ -99,7 +120,7 @@ steamcmd
 force_install_dir /home/steam/7d2d_server
 ```
 
-匿名でログイン
+匿名で Steam にログイン
 
 ```bash
 login anonymous
@@ -135,30 +156,12 @@ cd /home/steam/7d2d_server
 nano serverconfig.xml
 ```
 
-下記の設定をしておけば、Web dashboard からも設定の管理を行える はず
+下記の設定をしておけば、Web dashboard からもコンソールの利用が出来る
 
 | Option              | Values | Description                                                                                                                             |
 | ------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------- |
 | WebDashboardEnabled | true   | Enable the web dashboard                                                                                                                |
 | EnableMapRendering  | true   | Enable rendering of the map to tile images while exploring it.<br/>This is used e.g. by the web dashboard to display a view of the map. |
-
-#### ファイアウォールの設定
-
-SSH 接続に TCP `22`、\
-デフォルトで TCP の`26900`と`8081`、UDP の`26900`-`26903`を\
-Web dashboard オプションで`8080`を使うので、これらのポートを開放する
-
-```bash
-sudo ufw allow 22/tcp
-sudo ufw allow 8080:8081/tcp
-sudo ufw allow 26900/tcp
-sudo ufw allow 26900:26903/udp
-sudo ufw enable
-```
-
-```bash
-sudo ufw status
-```
 
 #### 7d2d サーバの起動
 
@@ -169,14 +172,14 @@ sudo ufw status
 ./startserver.sh -configfile=serverconfig.xml
 ```
 
-telnet で外部から接続が成功できるようになれば、サーバ起動は完了
+telnet で外部からサーバの稼働状況が確認できる
 
 ```ps
-telnet <<VM_External_IP>> 26900
+telnet <<VM_External_IP>> 8081
 ```
 
 Web Control Panel オプションを有効にしていた場合、\
-以下のアドレスで外部から Web Control Panel に接続できることを確認する
+以下のアドレスで外部から Web Control Panel に接続できる
 
 ```text
 http://<<VM_External_IP>>:8080/
@@ -184,18 +187,7 @@ http://<<VM_External_IP>>:8080/
 
 ゲームクライアントで ゲームに参加する > IP に接続 から、\
 VM インスタンスの **外部 IP** と、**ポート**(デフォルトは`26900`)を設定し、\
-クライアントからサーバに接続できるようにする
-
-## Afterword
-
-Google Cloud で構築されているゲームサーバの記事をあまり見ないが、そもそもこの用途ではプッシュされていないのでこんなものなのかもしれない\
-流石専用サーバの定番というべきか、Minecraft の記事はいくつか見つかった
-
-確かに安くはないが、Vultr と同じく従量課金制なので雑に作って壊してがしやすいのは嬉しいポイント\
-国産 VPS は従量課金制があまり流行ってない印象 流行って
-
-Vultr の方が安いっぽいが、Vultr はドライブ容量だけ増やすみたいなことができないので悩みどころ\
-Vultr は手軽に安く作れるが、必要スペックを細かく設定するなら Google Cloud の方が安くなる、というパターンがある か？
+クライアントからサーバを検索できるようにすることで、他の人もサーバに参加できるようになる
 
 ## Ref
 
@@ -209,3 +201,4 @@ Vultr は手軽に安く作れるが、必要スペックを細かく設定す�
 - [ufw で複数ポートを許可する設定をするには | エクセルソフト ブログ](https://www.xlsoft.com/jp/blog/blog/2018/03/07/post-3324-post-3324/)
 - [7 Days to Die サーバーをインストール (Ubuntu 18.04 LTS) | ほげぴよ.com](https://www.hogepiyo.com/wp/?p=1396)
 - [Linux でユーザー追加（adduser/useradd） | Ryoma's Blog](https://from.ri2lab.com/posts/530/)
+- [Google Cloud の Cloud Firewall を徹底解説！ - G-gen Tech Blog](https://blog.g-gen.co.jp/entry/cloud-firewall-explained)
