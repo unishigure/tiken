@@ -1,4 +1,4 @@
-# 7 Days to Die 専用サーバ 設定一覧
+# 7 Days to Die 専用サーバ設定 概要一覧
 
 7 Days to Die の **Alpha 21.1** 時点での `serverconfig.xml` の概要一覧\
 詳細は実際の `serverconfig.xml` を確認すること
@@ -38,12 +38,16 @@
 
 ### 管理インターフェース
 
+Web dashboard
+
 | Option              | Value | Description                   |
 | ------------------- | ----- | ----------------------------- |
 | WebDashboardEnabled | false | Web dashboard の有効/無効     |
 | WebDashboardPort    | 8080  | Web dashboard のポート        |
 | WebDashboardUrl     |       | Web dashboard の外部 URL      |
 | EnableMapRendering  | false | マップレンダリングの有効/無効 |
+
+Telnet
 
 | Option                      | Value | Description                                                              |
 | --------------------------- | ----- | ------------------------------------------------------------------------ |
@@ -52,6 +56,8 @@
 | TelnetPassword              |       | Telnet にアクセスするためのパスワード                                    |
 | TelnetFailedLoginLimit      | 10    | ログインに失敗した際、接続がブロックされるまでのパスワード入力の失敗回数 |
 | TelnetFailedLoginsBlocktime | 10    | ブロックの持続秒数                                                       |
+
+ターミナルウィンドウ
 
 | Option                | Value | Description                                                         |
 | --------------------- | ----- | ------------------------------------------------------------------- |
