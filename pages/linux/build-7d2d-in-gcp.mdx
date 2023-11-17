@@ -129,7 +129,7 @@ login anonymous
 ```
 
 7 Days to Die 専用サーバをインストール\
-ダウンロードに 3 万年掛かるので気長に待つ
+ダウンロードに 3 億年掛かるので気長に待つ
 
 ```bash
 app_update 294420
@@ -168,23 +168,27 @@ nano serverconfig.xml
 #### 7d2d サーバの起動
 
 サーバを起動\
-初回起動時は、ワールド作成に 3 億年かかるため気長に待つ
+初回起動時は、ワールド作成に 3 万年かかるため気長に待つ
 
 ```bash
 ./startserver.sh -configfile=serverconfig.xml
 ```
 
-telnet で外部からサーバの稼働状況が確認できる
+Telnet でサーバの稼働状況が確認できる
+
+```bash
+telnet localhost 8081
+```
 
 ```ps
-telnet <<VM_External_IP>> 8081
+telnet <VM ExternalIP> 8081
 ```
 
 Web dashboard オプションを有効にしていた場合、\
 以下のアドレスで外部から Web dashboard に接続できる
 
 ```text
-http://<<VM_External_IP>>:8080/
+http://<VM ExternalIP>:8080/
 ```
 
 ゲームクライアントで ゲームに参加する > IP に接続 から、\
@@ -203,8 +207,12 @@ VM インスタンスの **外部 IP** と、**ポート**(デフォルトは`26
 
 Telnet から `shutdown` コマンドを実行し、ゲームサーバをシャットダウンすることが出来る
 
+```bash
+telnet localhost 8081
+```
+
 ```ps
-telnet <<VM_External_IP>> 8081
+telnet <VM ExternalIP> 8081
 ```
 
 ```telnet
@@ -268,27 +276,33 @@ Telnet から管理者権限を管理、操作することが出来る
 
 プレイヤー名で追加・削除を行う場合は、対象のプレイヤーがサーバにログインしている必要がある
 
+Telnet で接続
+
+```bash
+telnet localhost 8081
+```
+
 ```ps
-telnet <<VM_External_IP>> 8081
+telnet <VM ExternalIP> 8081
 ```
 
-Admin ユーザの追加
+- Admin ユーザの追加
 
-```telnet
-admin add <name / entity id / platform + platform user id> <level>
-```
+  ```telnet
+  admin add <name / entity id / platform + platform user id> <level>
+  ```
 
-Admin ユーザの削除
+- Admin ユーザの削除
 
-```telnet
-admin remove <name / entity / platform + platform user id>
-```
+  ```telnet
+  admin remove <name / entity / platform + platform user id>
+  ```
 
-Admin ユーザの一覧を表示
+- Admin ユーザの一覧を表示
 
-```telnet
-admin list
-```
+  ```telnet
+  admin list
+  ```
 
 ## Ref
 
