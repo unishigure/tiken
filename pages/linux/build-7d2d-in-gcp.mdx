@@ -1,3 +1,5 @@
+import { FileTree } from "nextra/components";
+
 # Google Cloud で 7 Days to Die サーバを構築する
 
 VPC ファイアウォールむずすぎ
@@ -189,9 +191,63 @@ http://<<VM_External_IP>>:8080/
 VM インスタンスの **外部 IP** と、**ポート**(デフォルトは`26900`)を設定し、\
 クライアントからサーバを検索できるようにすることで、他の人もサーバに参加できるようになる
 
-## Bonus
+## Note
+
+### 専用サーバの設定項目
+
+以下のページにて、各設定項目の概要を記載
 
 [7 Days to Die 専用サーバ設定 概要一覧](/linux/7d2d-settings)
+
+### サーバのシャットダウン
+
+Telnet から `shutdown` コマンドを実行し、ゲームサーバをシャットダウンすることが出来る
+
+```ps
+telnet <<VM_External_IP>> 8081
+```
+
+```telnet
+shutdown
+```
+
+設定変更などをした後、初回と同様のコマンドでサーバを起動することができる
+
+```bash
+sudo su - steam
+```
+
+```bash
+/home/steam/7d2d_server/startserver.sh -configfile=serverconfig.xml
+```
+
+### ゲームデータの保存先
+
+サーバが開始されると、ホームディレクトリ下の `.local` ディレクトリ配下にゲームデータが保存される\
+ゲームネームディレクトリ（以下の例では`My Game`）配下のデータを削除すると、そのゲームデータは削除される
+
+また、`serverconfig.xml` で `GameName` を変更すると、新しいゲームが作成される\
+新しいゲームを始める際、容量に不足がなければ古いゲームデータを削除する必要はない
+
+<FileTree>
+  <FileTree.Folder name=".local/" defaultOpen>
+    <FileTree.Folder name="share" defaultOpen>
+      <FileTree.Folder name="7DaysToDie" defaultOpen>
+        <FileTree.Folder name="Saves" defaultOpen>
+          <FileTree.Folder name="PREGEN10k" defaultOpen>
+            <FileTree.Folder name="My Game" defaultOpen>
+              <FileTree.Folder name="Player"></FileTree.Folder>
+              <FileTree.Folder name="Region"></FileTree.Folder>
+              <FileTree.File name="main.ttw" />
+            </FileTree.Folder>
+          </FileTree.Folder>
+          <FileTree.File name="profiles.sdf" />
+          <FileTree.File name="serveradmin.xml" />
+        </FileTree.Folder>
+      </FileTree.Folder>
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
 
 ## Ref
 
@@ -206,3 +262,4 @@ VM インスタンスの **外部 IP** と、**ポート**(デフォルトは`26
 - [Linux でユーザー追加（adduser/useradd） | Ryoma's Blog](https://from.ri2lab.com/posts/530/)
 - [7 Days to Die - Linux Server Management](https://7dtd.illy.bz/wiki)
 - [Google Cloud の Cloud Firewall を徹底解説！ - G-gen Tech Blog](https://blog.g-gen.co.jp/entry/cloud-firewall-explained)
+- [Steam Community :: Guide :: Installing Linux dedicated server for 7 days to die](https://steamcommunity.com/sharedfiles/filedetails/?l=german&id=360404397)
