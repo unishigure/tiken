@@ -180,8 +180,8 @@ telnet で外部からサーバの稼働状況が確認できる
 telnet <<VM_External_IP>> 8081
 ```
 
-Web Control Panel オプションを有効にしていた場合、\
-以下のアドレスで外部から Web Control Panel に接続できる
+Web dashboard オプションを有効にしていた場合、\
+以下のアドレスで外部から Web dashboard に接続できる
 
 ```text
 http://<<VM_External_IP>>:8080/
@@ -249,6 +249,47 @@ sudo su - steam
   </FileTree.Folder>
 </FileTree>
 
+### Web Dashboard の利用
+
+Web Dashboard からコンソールを利用する場合、ユーザ登録が必要
+
+インゲームコンソールで以下コマンドを実行し、表示されるウィンドウに従って Web ユーザ登録を行う
+
+```shell
+createwebuser
+```
+
+### 管理者権限の付与
+
+インゲームコンソールや Web Dashboard から上級コマンドを実行したい場合、管理者権限と権限レベルが必要\
+Telnet から管理者権限を管理、操作することが出来る
+
+権限レベルは `0` が最も高く、明示されていないプレイヤーは `1000` として扱われる
+
+プレイヤー名で追加・削除を行う場合は、対象のプレイヤーがサーバにログインしている必要がある
+
+```ps
+telnet <<VM_External_IP>> 8081
+```
+
+Admin ユーザの追加
+
+```telnet
+admin add <name / entity id / platform + platform user id> <level>
+```
+
+Admin ユーザの削除
+
+```telnet
+admin remove <name / entity / platform + platform user id>
+```
+
+Admin ユーザの一覧を表示
+
+```telnet
+admin list
+```
+
 ## Ref
 
 - [7 Days to Die | The Survival Horde Crafting Game](https://7daystodie.com/)
@@ -263,3 +304,4 @@ sudo su - steam
 - [7 Days to Die - Linux Server Management](https://7dtd.illy.bz/wiki)
 - [Google Cloud の Cloud Firewall を徹底解説！ - G-gen Tech Blog](https://blog.g-gen.co.jp/entry/cloud-firewall-explained)
 - [Steam Community :: Guide :: Installing Linux dedicated server for 7 days to die](https://steamcommunity.com/sharedfiles/filedetails/?l=german&id=360404397)
+- [How to create a admin user for dashboard - General Support - 7 Days to Die](https://community.7daystodie.com/topic/32645-how-to-create-a-admin-user-for-dashboard/)
