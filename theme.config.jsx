@@ -1,7 +1,9 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 
-const siteUrl = process.env.SITE_URL || "localhost";
+function getSiteUrl() {
+  return process.env.SITE_URL || "localhost";
+}
 
 const config = {
   primaryHue: 5,
@@ -64,7 +66,8 @@ const config = {
     const { asPath, defaultLocale, locale } = useRouter();
 
     const url =
-      siteUrl + (defaultLocale === locale ? asPath : `/${locale}${asPath}`);
+      getSiteUrl() +
+      (defaultLocale === locale ? asPath : `/${locale}${asPath}`);
 
     let titleTemplate = "";
     if (asPath !== "/") {
@@ -81,7 +84,7 @@ const config = {
         description: "Tiken note ;)",
         images: [
           {
-            url: siteUrl + "/logo.png",
+            url: getSiteUrl() + "/logo.png",
             width: 750,
             height: 750,
             alt: "logo",
@@ -104,7 +107,7 @@ const config = {
         <link rel="me" href="https://fedibird.com/@unishigured" />
         <link rel="me" href="https://mi.seanut.app/@unishigured" />
         <meta property="twitter:description" content="Tiken note :o"></meta>
-        <meta property="twitter:image" content={siteUrl + "/image.png"} />
+        <meta property="twitter:image" content={getSiteUrl() + "/image.png"} />
         <meta charSet="utf-8" />
       </>
     );
