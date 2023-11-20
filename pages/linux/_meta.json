@@ -1,5 +1,6 @@
 {
   "build-misskey-in-vultr": "個人用 Misskey サーバを構築する",
+  "transter-misskey-to-kagoya": "Misskey サーバを KAGOYA CLOUD VPS に移管する",
   "pgadmin4-web-in-ubuntu": "リモートで Misskey PostgreSQL の Web GUI に接続する",
   "build-valheim-server": "Vultr で Valheim サーバを構築する",
   "build-7d2d-in-gcp": "Google Cloud で 7 Days to Die サーバを構築する",

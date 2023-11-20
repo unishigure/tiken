@@ -1,0 +1,257 @@
+# Misskey サーバを KAGOYA CLOUD VPS に移管する
+
+## Overview
+
+Vultr の最安構成ではディスク容量が心許なくなってきたので、\
+大容量を低価格で利用できる [KAGOYA CLOUD VPS](https://www.kagoya.jp/vps/) に個人用 Misskey サーバを移管する
+
+## Architecture
+
+- Misskey
+
+  バージョン [2023.11.1](https://github.com/misskey-dev/misskey/releases/tag/2023.11.1)
+
+  対象サーバは、 [個人用 Misskey サーバを構築する](/linux/build-misskey-in-vultr) で Vultr に建てたもの
+
+- VPS
+
+  大容量を低価格で利用できる [KAGOYA CLOUD VPS](https://www.kagoya.jp/vps/) を選択\
+  スペックを上げすぎずに大容量を選択できるのが大変うれしい
+
+  また、利用料金が日割りで気軽に利用しやすい
+
+  | Column   | Values           |
+  | -------- | ---------------- |
+  | OS       | Ubuntu 22.04 LTS |
+  | CPU      | 2 コア           |
+  | メモリ   | 2 GB             |
+  | ディスク | 200GB            |
+
+- Domain / DNS
+
+  [Cloudflare Registrar](https://www.cloudflare.com/ja-jp/products/registrar/) で引き続き管理
+
+- Object Storage
+
+  [Cloudflare R2](https://www.cloudflare.com/ja-jp/developer-platform/r2/) を引き続き利用
+
+## Flow
+
+### カゴヤ・クラウド VPS アカウント登録申請
+
+アカウント登録が完了し、利用を開始できるようになるまで少し時間が掛かるため、予め申請しておくと良い
+
+[KAGOYA CLOUD VPS](https://www.kagoya.jp/vps/) より、申し込みを行う\
+利用が出来るようになったら、登録したメールアドレスに通知が届く
+
+### 移管元サーバの停止
+
+移管元の misskey サーバに接続
+
+```bash
+ssh misskey
+```
+
+プロセスを停止する
+
+```bash
+sudo systemctl stop <hostname>
+```
+
+### 移管元データベースからバックアップを取得
+
+postgres ユーザに切り替える
+
+```bash
+sudo su - postgres
+```
+
+[Cloudflare R2 でバックアップの設定](/linux/build-misskey-in-vultr#cloudflare-r2-でバックアップの設定) にて作成したバックアップスクリプトを実行し、最新のバックアップを生成
+
+```bash
+bash ./backup-psql-all.sh
+```
+
+生成したバックアップを、R2 からローカルにダウンロードする
+
+### KAGOYA CLOUD VPS インスタンスを作成
+
+[KAGOYA CLOUD VPS コントロールパネル](https://vps.kagoya.com/)にログインし、インスタンス作成 を選択
+
+画面に従い、以下の内容でインスタンスを作成する\
+途中生成される **ログイン用認証キー** を、ローカルの `.ssh` ディレクトリ以下に保存する
+
+| Column                       | Values                         |
+| ---------------------------- | ------------------------------ |
+| パッケージ OS テンプレート   | Ubuntu 22.04 LTS               |
+| アプリケーションセットアップ | （なし）                       |
+| スペック                     | 大容量 2 コア / 2 GB 200GB SSD |
+| virtio                       | ON                             |
+| セキュリティグループ         | （なし）                       |
+| ネットワーク                 | （なし）                       |
+| ユーザーデータ               | （なし）                       |
+
+入力が完了したら、インスタンス作成 を押下する\
+緑の電源ボタンが表示され、稼働状態になれば、インスタンス作成は完了
+
+作成したインスタンスに接続するための SSH 設定を追記しておく
+
+```config filename=".ssh/config"
+Host kagoya-mi
+    User root
+    Hostname <インスタンスIP>
+    IdentityFile ~/.ssh/<生成されたログイン用認証キー>
+```
+
+### DNS レコードの変更
+
+[Cloudflare](https://dash.cloudflare.com/) で DNS レコードの向き先を変更する
+
+ドメイン登録 > ドメイン管理 > （該当ドメイン） > 管理 から、
+クイックアクション > DNS の設定を更新する を選択し、DNS レコード画面を開く
+
+KAGOYA Cloud VPS インスタンスの詳細画面から対象の IP を確認し、
+該当サブドメインのレコードをタイプ A / AAAA それぞれ変更する
+
+| タイプ | 名前           | アドレス                                       |
+| ------ | -------------- | ---------------------------------------------- |
+| A      | (サブドメイン) | (インスタンス詳細画面 IP 左側の IPv4 アドレス) |
+| AAAA   | (サブドメイン) | (インスタンス詳細画面 IP 右側の IPv6 アドレス) |
+
+### Misskey サーバのインストール
+
+移行前と同様、[Misskey install shell script](https://github.com/joinmisskey/bash-install) を実行して、 Misskey をインストールする
+
+サーバに接続する
+
+```bash
+ssh kagoya-mi
+```
+
+環境を最新にする
+
+```bash
+sudo apt update; sudo apt full-upgrade -y; sudo reboot
+```
+
+再起動後、再度サーバに接続する
+
+```bash
+ssh kagoya-mi
+```
+
+インストールスクリプトを実行する\
+postgres 関連の設定は、移行前と同様になるよう注意する
+
+```bash
+wget https://raw.githubusercontent.com/joinmisskey/bash-install/main/ubuntu.sh -O ubuntu.sh; sudo bash ubuntu.sh
+```
+
+Misskey を一旦停止する
+
+```bash
+sudo systemctl stop <hostname>
+```
+
+### データベースの復元
+
+ローカルから、DL しておいたバックアップ圧縮ファイルをインスタンスに転送
+
+```ps
+scp -i ~/.ssh/<ログイン用認証キー> Downloads/<バックアップ .tar.gz ファイル> root@kagoya-mi:~/
+```
+
+サーバ上で、転送されたバックアップ圧縮ファイルを解凍
+
+```bash
+tar -zxvf <バックアップ .tar.gz ファイル>
+```
+
+バックアップファイルを postgres ディレクトリ下に移動
+
+```bash
+mv ./dumpall_psql.dmp /var/lib/postgresql/
+```
+
+不要になった圧縮ファイルを削除
+
+```bash
+rm -rf dumpall_psql*
+```
+
+postgres ユーザに切り替え
+
+```bash
+sudo su - postgres
+```
+
+自動生成されたデータベースを削除
+
+```bash
+dropdb mk1
+```
+
+postgres のリストアを実行
+
+```bash
+psql -U postgres -f ./dumpall_psql.dmp
+```
+
+元のデータベースが復元されていることを確認
+
+```bash
+psql -U postgres -d mk1
+```
+
+不要になったバックアップファイルを削除
+
+```bash
+rm -rf dumpall_psql.dmp
+```
+
+### Misskey サーバの起動
+
+Misskey を起動する
+
+```bash
+ssh kagoya-mi
+```
+
+```bash
+sudo systemctl start <hostname>
+```
+
+問題なくアクセスできることを確認する
+
+```text
+https://<hostname>
+```
+
+ついでにアップデートスクリプトを DL しておく
+
+```bash
+wget https://raw.githubusercontent.com/joinmisskey/bash-install/main/update.ubuntu.sh -O update.sh
+```
+
+### 自動バックアップの再設定
+
+[初回構築時](/linux/build-misskey-in-vultr#cloudflare-r2-でバックアップの設定)と同様に、自動バックアップの設定を行う\
+API の Access/Secret Key は再表示できないので、API トークン管理画面で **ロール** を選択し、再生成して入力する
+
+awscli が入っていないので、root ユーザでインストールしておく
+
+```bash
+apt install awscli
+```
+
+また、KAGOYA CLOUD VPS のインスタンスはデフォルトで JST がタイムゾーンとして設定されている
+
+### 移管元 VPS の削除
+
+移管元の Vultr VPS を忘れずに削除する\
+お疲れ様でした
+
+## Ref
+
+- [joinmisskey/bash-install: Install Misskey with one shell script!](https://github.com/joinmisskey/bash-install)
+- [データベースの削除](https://www.postgresql.jp/document/8.0/html/manage-ag-dropdb.html)
