@@ -1,0 +1,143 @@
+import { Tabs } from "nextra/components";
+
+# VScode で TypeScript をデバッグする
+
+## Overview
+
+Windows 環境の VScode で TypeScript をデバッグできる環境を構築する\
+個人的な好みで [PowerShell](https://learn.microsoft.com/ja-jp/powershell/) と [pnpm](https://pnpm.io/) を使用する
+
+## In Short
+
+```ps
+ni -type dir ts-project | cd
+pnpm add -D typescript
+ni tsconfig.json -V '{ "compilerOptions": { /* Visit https://aka.ms/tsconfig to read more about this file */ "target": "es2016", "module": "commonjs", "sourceMap": true, "outDir": "./out", "esModuleInterop": true, "forceConsistentCasingInFileNames": true, "strict": true, "skipLibCheck": true } }'
+ni -F .vscode/launch.json -V '{ "version": "0.2.0", "configurations": [ { "type": "node", "request": "launch", "name": "Launch Program", "skipFiles": ["<node_internals>/**"], "program": "${file}", "preLaunchTask": "tsc", "outFiles": ["${workspaceFolder}/**/*.js"] } ] }'
+ni -F .vscode/tasks.json -V '{ "version": "2.0.0", "tasks": [ { "type": "typescript", "tsconfig": "tsconfig.json", "problemMatcher": ["$tsc"], "group": { "kind": "build", "isDefault": true }, "label": "tsc" } ] }'
+```
+
+## Flow
+
+### プロジェクトの作成
+
+プロジェクトディレクトリを作成して移動
+
+```ps
+ni -type dir ts-project | cd
+```
+
+typescript パッケージを追加
+
+```ps
+pnpm add -D typescript
+```
+
+`tsconfig.json`を作成
+
+```ps
+ni tsconfig.json -V '{ "compilerOptions": { /* Visit https://aka.ms/tsconfig to read more about this file */ "target": "es2016", "module": "commonjs", "sourceMap": true, "outDir": "./out", "esModuleInterop": true, "forceConsistentCasingInFileNames": true, "strict": true, "skipLibCheck": true } }'
+```
+
+作成されるファイルをフォーマットしたものは以下\
+強調部分がデバッグに必要な設定
+
+```json filename="tsconfig.json" {6}
+{
+  "compilerOptions": {
+    /* Visit https://aka.ms/tsconfig to read more about this file */
+    "target": "es2016",
+    "module": "commonjs",
+    "sourceMap": true,
+    "outDir": "./out",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true
+  }
+}
+```
+
+`.vscode/launch.json` を作成
+
+```ps
+ni -F .vscode/launch.json -V '{ "version": "0.2.0", "configurations": [ { "type": "node", "request": "launch", "name": "Launch Program", "skipFiles": ["<node_internals>/**"], "program": "${file}", "preLaunchTask": "tsc", "outFiles": ["${workspaceFolder}/**/*.js"] } ] }'
+```
+
+作成されるファイルをフォーマットしたものは以下\
+タスクを呼び出した後、アクティブなファイルを実行する構成
+
+```json filename=".vscode/launch.json"
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Program",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${file}",
+      "preLaunchTask": "tsc",
+      "outFiles": ["${workspaceFolder}/**/*.js"]
+    }
+  ]
+}
+```
+
+`.vscode/tasks.json` を作成
+
+```ps
+ni -F .vscode/tasks.json -V '{ "version": "2.0.0", "tasks": [ { "type": "typescript", "tsconfig": "tsconfig.json", "problemMatcher": ["$tsc"], "group": { "kind": "build", "isDefault": true }, "label": "tsc" } ] }'
+```
+
+作成されるファイルをフォーマットしたものは以下\
+TypeScript をコンパイルするタスク
+
+```json filename=".vscode/tasks.json"
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "typescript",
+      "tsconfig": "tsconfig.json",
+      "problemMatcher": ["$tsc"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "label": "tsc"
+    }
+  ]
+}
+```
+
+### デバッグの確認
+
+VScode でプロジェクトディレクトリを開く
+
+```ps
+code .
+```
+
+適当な ts ファイルを追加
+
+```ps
+ni -F src/index.ts -V 'const message = "Hello world!"; console.log(message);'
+```
+
+```ts filename="src/index.ts"
+const message = "Hello world!";
+console.log(message);
+```
+
+追加した ts ファイルを VScode 上で開く
+
+VScode の 実行タブ > **デバッグの開始** または **F5 キー** で、\
+js ファイルが生成され、デバッグが開始する
+
+![start debug](/typescript/debug-ts-with-vscode/debug.png)
+
+## Ref
+
+- [VSCode で TypeScript をデバッグする方法](https://zenn.dev/taku2000/articles/6ed43064eb3aa0)
+- [Visual Studio Code を使用した TypeScript のデバッグ](https://code.visualstudio.com/docs/typescript/typescript-debugging)
