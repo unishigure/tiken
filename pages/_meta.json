@@ -4,9 +4,10 @@
     "display": "hidden"
   },
   "works": "Works",
+  "java": "Java",
+  "python": "Python",
   "typescript": "TypeScript",
   "nextjs": "Next.js",
-  "java": "Java",
   "linux": "Linux",
   "vscode": "VSCode",
   "misskey": "Misskey",

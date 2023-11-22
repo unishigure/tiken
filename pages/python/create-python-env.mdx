@@ -1,0 +1,78 @@
+# Python の開発環境を構築する
+
+## Overview
+
+Python するか…となったとき、毎回全てを忘却していて調べ直すので、最低限の環境構築手順をまとめておく
+
+## Flow
+
+### Python のインストール
+
+Python の [公式ページ](https://www.python.org/) からダウンロードしてインストールする
+
+途中、環境変数に追加する旨のオプションを選択するのを忘れない\
+`Add Python 3.x to PATH` とか `Add Python to environment variables` とか地味に文言が変わっている
+
+`python` コマンドで MS Store に飛ばされなければ完了
+
+```ps
+python
+```
+
+```ps
+py
+```
+
+大体 pip が更新されているので、ついでに更新する
+
+```
+python -m pip install --upgrade pip
+```
+
+### 仮想環境の作成
+
+仮想環境を作成\
+末尾のファイル名は任意
+
+```ps
+py -m venv .env
+```
+
+仮想環境を有効化\
+ターミナルの行先頭に `(.env)` のように仮想環境ディレクトリ名が表示される
+
+```ps
+./.env/Scripts/activate
+```
+
+任意のパッケージをインストール
+
+```ps
+pip install <target_package>
+```
+
+仮想環境を終了
+
+```ps
+deactivate
+```
+
+### パッケージ管理ファイルの作成
+
+`requirements.txt` にインストールされているパッケージ一覧が出力される
+
+```ps
+pip freeze > requirements.txt
+```
+
+## Afterword
+
+[Pipenv](https://pipenv.pypa.io/) とかもあったな\
+どれがベストプラクティスなのかよくわからない
+
+venv は標準だが、Pipenv の方が npm 系に似ているので取っつきやすくはありそう
+
+## Ref
+
+- [Python 環境構築ガイド - python.jp](https://www.python.jp/install/install.html)
+- [Python と venv で仮想環境の構築から環境の複製・配布の流れ │Tatsuya Note](https://tatsuya-note.com/python-venv-build-and-share/)
