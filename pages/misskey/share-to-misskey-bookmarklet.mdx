@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 # Misskey に URL を共有するブックマークレット
 
 自鯖 [Mi.seanut](https://mi.seanut.app/) に簡単に URL を共有するノートを投稿できるブックマークの作り方\
@@ -17,6 +15,13 @@ PC/スマートフォンのどちらでも利用可
     javascript:(function(){var w=600,h=400;window.open("https://mi.seanut.app/share?text="+encodeURIComponent(document.title)+" "+encodeURIComponent(location.href),"_blank","width="+w+",height="+h+",left="+(screen.width-w)/2*3+",top="+(screen.height-h)/2*3+",scrollbars=yes,resizable=yes,toolbar=no,location=yes")})()
     ```
 
+   <details>
+     <summary>Misskey.io版</summary>
+      ```js
+      javascript:(function(){var w=600,h=400;window.open("https://misskey.io/share?text="+encodeURIComponent(document.title)+" "+encodeURIComponent(location.href),"_blank","width="+w+",height="+h+",left="+(screen.width-w)/2*3+",top="+(screen.height-h)/2*3+",scrollbars=yes,resizable=yes,toolbar=no,location=yes")})()
+      ```
+   </details>
+
    ![Add Bookmark](/misskey/share-to-misskey-bookmarklet/add_bookmark.webp)
 
 2. 共有したいページを開いた状態で、作成したブックマークを選択
@@ -33,6 +38,13 @@ PC/スマートフォンのどちらでも利用可
 ```js
 javascript: (function () { var w = 600, h = 400; window.open( "https://mi.seanut.app/share?text=" + "> " + encodeURIComponent(document.title) + " " + encodeURIComponent(location.href), "_blank", "width=" + w + ",height=" + h + ",left=" + ((screen.width - w) / 2) * 3 + ",top=" + ((screen.height - h) / 2) * 3 + ",scrollbars=yes,resizable=yes,toolbar=no,location=yes" ); })();
 ```
+
+<details>
+  <summary>Misskey.io版</summary>
+   ```js
+   javascript: (function () { var w = 600, h = 400; window.open( "https://misskey.io/share?text=" + "> " + encodeURIComponent(document.title) + " " + encodeURIComponent(location.href), "_blank", "width=" + w + ",height=" + h + ",left=" + ((screen.width - w) / 2) * 3 + ",top=" + ((screen.height - h) / 2) * 3 + ",scrollbars=yes,resizable=yes,toolbar=no,location=yes" ); })();
+   ```
+</details>
 
 <center>
 
