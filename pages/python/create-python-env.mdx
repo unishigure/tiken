@@ -31,6 +31,14 @@ pip install --upgrade pip
 
 ### 仮想環境の作成
 
+プロジェクトディレクトリを作成し、カレントディレクトリにする
+
+```ps
+ni -type dir <project_name> | cd
+```
+
+---
+
 #### venv
 
 Python 標準モジュールの [venv](https://docs.python.org/ja/3/library/venv.html) で仮想環境を作成する場合
@@ -42,6 +50,12 @@ Python 標準モジュールの [venv](https://docs.python.org/ja/3/library/venv
 
 ```ps
 py -m venv .env
+```
+
+git から除外したいときは、仮想環境ディレクトリ下に `.gitignore` も作成しておく
+
+```ps
+ni .env/.gitignore -V "*"
 ```
 
 仮想環境を有効化\
@@ -82,6 +96,8 @@ pip freeze > requirements.txt
 ```ps
 pip install -r requirements.txt
 ```
+
+---
 
 #### Pipenv
 
