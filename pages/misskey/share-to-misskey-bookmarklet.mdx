@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 # Misskey に URL を共有するブックマークレット
 
 自鯖 [Mi.seanut](https://mi.seanut.app/) に簡単に URL を共有するノートを投稿できるブックマークの作り方\
@@ -6,6 +8,8 @@
 PC/スマートフォンのどちらでも利用可
 
 ## HowTo
+
+### 通常版
 
 1. 以下のテキストを全てコピーし、任意のブラウザにてブックマークの URL に登録（ブックマーク名は任意）
 
@@ -21,6 +25,24 @@ PC/スマートフォンのどちらでも利用可
    ![Shere Window](/misskey/share-to-misskey-bookmarklet/shere_window.png)
 
 4. 自由に追記して、投稿！
+
+### 引用版（nyaize 対応）
+
+猫モード中は、`な` が `にゃ` に変換されてしまうので、引用文としてリンクを表示する
+
+```js
+javascript: (function () { var w = 600, h = 400; window.open( "https://mi.seanut.app/share?text=" + "> " + encodeURIComponent(document.title) + " " + encodeURIComponent(location.href), "_blank", "width=" + w + ",height=" + h + ",left=" + ((screen.width - w) / 2) * 3 + ",top=" + ((screen.height - h) / 2) * 3 + ",scrollbars=yes,resizable=yes,toolbar=no,location=yes" ); })();
+```
+
+<center>
+
+![nyaized shere](/misskey/share-to-misskey-bookmarklet/nyaized_shere.png)
+通常版
+
+![no nyaized shere](/misskey/share-to-misskey-bookmarklet/no_nyaized_shere.png)
+引用版
+
+</center>
 
 ## Source
 
