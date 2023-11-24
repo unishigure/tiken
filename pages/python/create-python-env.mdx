@@ -26,10 +26,16 @@ py
 大体 pip が更新されているので、ついでに更新する
 
 ```
-python -m pip install --upgrade pip
+pip install --upgrade pip
 ```
 
 ### 仮想環境の作成
+
+#### venv
+
+Python 標準モジュールの [venv](https://docs.python.org/ja/3/library/venv.html) で仮想環境を作成する場合
+
+##### 環境作成
 
 仮想環境を作成\
 末尾のファイル名は任意
@@ -51,13 +57,19 @@ py -m venv .env
 pip install <target_package>
 ```
 
+インストールされているパッケージの一覧を確認
+
+```ps
+pip list
+```
+
 仮想環境を終了
 
 ```ps
 deactivate
 ```
 
-### パッケージ管理ファイルの作成
+##### パッケージ管理ファイルの作成
 
 `requirements.txt` にインストールされているパッケージ一覧が出力される
 
@@ -71,14 +83,100 @@ pip freeze > requirements.txt
 pip install -r requirements.txt
 ```
 
+#### Pipenv
+
+Python 依存関係管理ツールの [Pipenv](https://pipenv.pypa.io/) で仮想環境を作成する場合
+
+##### Pipenv のインストール
+
+```ps
+pip install --user pipenv
+```
+
+##### パッケージのインストール
+
+パッケージのインストール時、`Pipfile` と仮想環境がなければ同時に生成される
+
+任意のパッケージをインストール
+
+```ps
+pipenv install <target_package>
+```
+
+開発時にのみ使用する、任意のパッケージをインストール
+
+```ps
+pipenv install --dev <target_package>
+```
+
+##### Python プログラムの実行
+
+生成された仮想環境を使って、Python プログラムを実行する
+
+```ps
+pipenv run py <target_python_file>
+```
+
+または、生成された仮想環境内に shell を起動して、プログラムを実行する
+
+```ps
+pipenv shell
+```
+
+```ps
+py <target_python_file>
+```
+
+仮想環境内の shell を終了する
+
+```ps
+exit
+```
+
+##### 仮想環境の管理
+
+デフォルトでは、仮想環境は共通のディレクトリに生成される\
+プロジェクトディレクトリ直下に生成したい場合は、環境変数に `PIPENV_VENV_IN_PROJECT=1` を設定しておく
+
+`Pipfile` から仮想環境を生成する\
+`Pipfile.lock` がある場合は、優先的に参照される
+
+```ps
+pipenv install
+```
+
+`Pipfile` から開発用の仮想環境を生成する
+
+```ps
+pipenv install --dev
+```
+
+仮想環境のパスを表示する
+
+```ps
+pipenv --venv
+```
+
+仮想環境を削除する
+
+```ps
+pipenv --rm
+```
+
+`Pipfile` を `requirements.txt` に変換する
+
+```ps
+pipenv lock -r
+```
+
 ## Afterword
 
-[Pipenv](https://pipenv.pypa.io/) とかもあったな\
-どれがベストプラクティスなのかよくわからない
-
-venv は標準だが、Pipenv の方が npm 系に似ているので取っつきやすくはありそう
+個人で使う分にはどちらでも良いかな\
+チームで環境を共有したいようなときには、Pipenv の方が使いやすいかも
 
 ## Ref
 
 - [Python 環境構築ガイド - python.jp](https://www.python.jp/install/install.html)
 - [Python と venv で仮想環境の構築から環境の複製・配布の流れ │Tatsuya Note](https://tatsuya-note.com/python-venv-build-and-share/)
+- [Pipenv: 人間のための Python 開発ワークフロー](https://pipenv-ja.readthedocs.io/)
+- [Pipenv の基本的な使い方 — pipenv](https://pipenv-ja.readthedocs.io/ja/translate-ja/basics.html#general-recommendations-version-control)
