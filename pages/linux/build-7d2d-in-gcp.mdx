@@ -304,12 +304,33 @@ telnet <VM ExternalIP> 8081
   admin list
   ```
 
+## Error
+
+### `mmap(PROT_NONE) failed` でサーバが異常終了する
+
+朝起きたらゲームサーバが停止していたため、\
+`/home/steam/7d2d_server/7DaysToDieServer_Data/output_log__yyyy-MM-dd__HH-mm-ss.txt`\
+からログを確認
+
+`mmap(PROT_NONE) failed` で異常終了していたことを確認
+
+デフォルトの `vm.max_map_count` 値 `65530` が低すぎて足りなくなったらしい\
+下記コマンドで上限値を増やす
+
+```bash
+sudo sysctl -w vm.max_map_count=262144
+```
+
+- [Bug - [solved][ il2cpp android] mmap(PROT_NONE) failed - Unity Forum](https://forum.unity.com/threads/solved-il2cpp-android-mmap-prot_none-failed.1112581/)
+- [Linux版のRustサーバーがmmap(PROT_NONE) failedで落ちる - Chase The Core](https://chasethecore.run/?p=3068)
+- [パラメーター "max_map_count" とは何ですか? サーバーのパフォーマンスへの影響はありますか? - Red Hat Customer Portal](https://access.redhat.com/ja/solutions/7031597)
+
 ## Ref
 
 - [7 Days to Die | The Survival Horde Crafting Game](https://7daystodie.com/)
 - [SteamCMD - Valve Developer Community](https://developer.valvesoftware.com/wiki/SteamCMD)
 - [7 Days to Die Dedicated Server - Valve Developer Community](https://developer.valvesoftware.com/wiki/7_Days_to_Die_Dedicated_Server)
-- [7Days To Die Ubuntu を用いたサーバの建て方 気まま研究所](https://kimamalab.azurewebsites.net/SevenDays/BuildServerUbuntu#Fixes_ChangeMapPermission)
+- [7Days To Die Ubuntu を用いたサーバの建て方 気まま研究所](https://kimamalab.azurewebsites.net/SevenDays/BuildServerUbuntu)
 - [GCP で無料の Minecraft サーバを立ててみた](https://zenn.dev/okayuuuuu/articles/034777523c33fa)
 - [SIGSEGV - Bug Pool - 7 Days to Die](https://community.7daystodie.com/a21-bugs-main/bug-pool/sigsegv-r678/)
 - [ufw で複数ポートを許可する設定をするには | エクセルソフト ブログ](https://www.xlsoft.com/jp/blog/blog/2018/03/07/post-3324-post-3324/)
