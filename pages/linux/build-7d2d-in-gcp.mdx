@@ -195,6 +195,109 @@ http://<VM ExternalIP>:8080/
 VM インスタンスの **外部 IP** と、**ポート**(デフォルトは`26900`)を設定し、\
 クライアントからサーバを検索できるようにすることで、他の人もサーバに参加できるようになる
 
+#### Mod の追加（オプション）
+
+Mod 関連のファイルは主に `<Game directory>/Mods` (`/home/steam/7d2d_server/Mods`) 以下に格納される\
+詳しい Mod のインストール・設定方法は各 Mod 配布元で確認すること
+
+以下手順では、UI 拡張 Mod の [SMXcore](https://7daystodiemods.com/smxcore-the-core-mod/) と [SMXhud](https://7daystodiemods.com/smxhud-the-hud-replacement-mod/)、[SMXmenu](https://7daystodiemods.com/smxmenu-the-menu-replacement-mod/)、[SMXui](https://7daystodiemods.com/smxui-the-ui-replacement-mod/) を追加する\
+これらはサーバ・クライアントの両方に Mod が導入されている必要があるため注意
+
+ゲームサーバが停止されている状態で、Mod の追加を行う
+
+steam ユーザに変更
+
+```bash
+sudo su - steam
+```
+
+zip ファイルを解凍するため、unzip をインストールする
+
+```bash
+sudo apt install unzip
+```
+
+Mod をダウンロードするディレクトリを作成し、それをカレントディレクトリにする
+
+```bash
+mkdir ~/modfiles; cd ~/modfiles
+```
+
+各 Mod ファイルをダウンロード
+
+```bash
+wget -O SMXcore.zip https://github.com/Sirillion/SMXcore/archive/refs/heads/main.zip
+```
+
+```bash
+wget -O SMXhud.zip https://github.com/Sirillion/SMXhud/archive/refs/heads/master.zip
+```
+
+```bash
+wget -O SMXmenu.zip https://github.com/Sirillion/SMXmenu/archive/refs/heads/master.zip
+```
+
+```bash
+wget -O SMXui.zip https://github.com/Sirillion/SMXui/archive/refs/heads/master.zip
+```
+
+ダウンロードした zip ファイルを解凍
+
+```bash
+unzip SMXcore.zip
+```
+
+```bash
+unzip SMXhud.zip
+```
+
+```bash
+unzip SMXmenu.zip
+```
+
+```bash
+unzip SMXui.zip
+```
+
+不要になった zip ファイルを削除
+
+```bash
+rm -rf *.zip
+```
+
+解凍した Mod ファイルから、Mod 本体を `Mods` ディレクトリにコピー
+
+```bash
+cp -rp SMXcore-main/SMXcore /home/steam/7d2d_server/Mods
+cp -rp SMXcore-main/0-Quartz /home/steam/7d2d_server/Mods
+```
+
+```bash
+cp -rp SMXhud-master/SMXhud /home/steam/7d2d_server/Mods
+cp -rp SMXhud-master/ZMXhudCP /home/steam/7d2d_server/Mods
+```
+
+```bash
+cp -rp SMXmenu-master/SMXmenu /home/steam/7d2d_server/Mods
+```
+
+```bash
+cp -rp SMXui-master/SMXui /home/steam/7d2d_server/Mods
+cp -rp SMXui-master/ZMXuiCP /home/steam/7d2d_server/Mods
+```
+
+Mod ファイルが規定の階層に配置されたことを確認
+
+```bash
+ls -la /home/steam/7d2d_server/Mods
+```
+
+サーバを開始する
+
+```bash
+/home/steam/7d2d_server/startserver.sh -configfile=serverconfig.xml
+```
+
 ## Note
 
 ### 専用サーバの設定項目
@@ -322,7 +425,7 @@ sudo sysctl -w vm.max_map_count=262144
 ```
 
 - [Bug - [solved][ il2cpp android] mmap(PROT_NONE) failed - Unity Forum](https://forum.unity.com/threads/solved-il2cpp-android-mmap-prot_none-failed.1112581/)
-- [Linux版のRustサーバーがmmap(PROT_NONE) failedで落ちる - Chase The Core](https://chasethecore.run/?p=3068)
+- [Linux 版の Rust サーバーが mmap(PROT_NONE) failed で落ちる - Chase The Core](https://chasethecore.run/?p=3068)
 - [パラメーター "max_map_count" とは何ですか? サーバーのパフォーマンスへの影響はありますか? - Red Hat Customer Portal](https://access.redhat.com/ja/solutions/7031597)
 
 ## Ref
