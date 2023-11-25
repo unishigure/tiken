@@ -1,0 +1,44 @@
+# 簡単に Node.js 最新版をインストールする
+
+## Overview
+
+apt 単体では最新の [Node.js](https://nodejs.org/) をインストールすることはできないが、\
+Node バージョン管理パッケージ [n](https://github.com/tj/n) で、Ubuntu へシンプルに最新の [Node.js](https://nodejs.org/) をインストールすることができたので覚え書き
+
+ほぼ以下記事の焼き増し　深く感謝\
+[Ubuntu に最新の Node.js を難なくインストールする #Node.js - Qiita](https://qiita.com/seibe/items/36cef7df85fe2cefa3ea)
+
+## In Short
+
+```bash
+sudo apt update; sudo apt install -y nodejs npm
+sudo npm install -g n
+sudo n stable
+sudo apt purge -y nodejs npm
+```
+
+## Detail
+
+apt を最新にし、apt で一時的に nodejs と npm をインストール
+
+```bash
+sudo apt update; sudo apt install -y nodejs npm
+```
+
+npm で n をインストール
+
+```bash
+sudo npm install -g n
+```
+
+n で最新安定版の nodejs をインストール
+
+```bash
+sudo n stable
+```
+
+apt でインストールした nodejs と npm をアンインストール
+
+```bash
+sudo apt purge -y nodejs npm
+```

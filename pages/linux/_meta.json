@@ -1,4 +1,5 @@
 {
+  "install-nodejs": "簡単に Node.js 最新版をインストールする",
   "build-misskey-in-vultr": "個人用 Misskey サーバを構築する",
   "transter-misskey-to-kagoya": "Misskey サーバを KAGOYA CLOUD VPS に移管する",
   "pgadmin4-web-in-ubuntu": "リモートで Misskey PostgreSQL の Web GUI に接続する",
