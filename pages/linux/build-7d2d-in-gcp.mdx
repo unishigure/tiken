@@ -417,16 +417,33 @@ telnet <VM ExternalIP> 8081
 
 `mmap(PROT_NONE) failed` で異常終了していたことを確認
 
-デフォルトの `vm.max_map_count` 値 `65530` が低すぎて足りなくなったらしい\
-下記コマンドで上限値を増やす
+デフォルトの `vm.max_map_count` 値 `65530` が低すぎて足りなくなったらしい
+
+下記コマンドで、一時的に上限値を増やす\
+この場合、インスタンスの停止を行うと、再起動時にはデフォルトの値に戻る
 
 ```bash
 sudo sysctl -w vm.max_map_count=262144
 ```
 
+もしくは、`/etc/sysctl.conf` ファイルに追記して値を更新する
+
+```bash
+sudo nano /etc/sysctl.conf
+```
+
+```bash filename="/etc/sysctl.conf"
+vm.max_map_count=262144
+```
+
+```bash
+sudo sysctl -p
+```
+
 - [Bug - [solved][ il2cpp android] mmap(PROT_NONE) failed - Unity Forum](https://forum.unity.com/threads/solved-il2cpp-android-mmap-prot_none-failed.1112581/)
 - [Linux 版の Rust サーバーが mmap(PROT_NONE) failed で落ちる - Chase The Core](https://chasethecore.run/?p=3068)
 - [パラメーター "max_map_count" とは何ですか? サーバーのパフォーマンスへの影響はありますか? - Red Hat Customer Portal](https://access.redhat.com/ja/solutions/7031597)
+- [2.2. 永続的なチューニングパラメーターの設定 Red Hat Enterprise Linux for Real Time 7 | Red Hat Customer Portal](https://access.redhat.com/documentation/ja-jp/red_hat_enterprise_linux_for_real_time/7/html/tuning_guide/setting_persistent_tuning_parameters)
 
 ## Ref
 
