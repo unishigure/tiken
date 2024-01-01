@@ -1,0 +1,75 @@
+import { Callout } from "nextra/components";
+
+# Google Compute Engine からローカルに大容量ファイルを転送する
+
+## Overview
+
+[Google Compute Engine に構築したインスタンス](/linux/build-7d2d-in-gcp)から、バックアップ用にファイルをローカルにダウンロードした
+
+大容量の zip になってしまったため、ブラウザのコンソールからのダウンロードは出来なかった\
+そのため、Cloud Storage を経由して転送した
+
+## Flow
+
+### Cloud Storage バケットの作成
+
+Cloud Storage の[バケット](https://console.cloud.google.com/storage/browser)ページにて、**作成** ボタンを押下\
+任意のバケットを作成
+
+![Create bucket](/others/copy-gce-object/create-bucket.png)
+
+### Cloud Compute からファイルをアップロード
+
+Cloud Compute の [VM インスタンス](https://console.cloud.google.com/compute/instances)ページから、SSH コンソールを開く
+
+gcloud の CLI にログインする\
+コマンドの指示に従い URL を開き、 Google Cloud の権限を持つ Google アカウントを選択\
+表示されるコードをコンソールに入力して認証する
+
+```bash
+gcloud auth login
+```
+
+<Callout type="warning" emoji="⚠">
+  長期的な運用では、適切な権限を付与したサービスアカウントの作成などを検討すること
+</Callout>
+
+Google Storage にファイルを転送する
+
+- `OBJECT_LOCATION` : 転送したいファイルのローカルパス
+- `DESTINATION_BUCKET_NAME` : 作成したバケット名
+
+```bash
+gcloud storage cp OBJECT_LOCATION gs://DESTINATION_BUCKET_NAME/
+```
+
+転送後、不要であれば gcloud の CLI から先程ログインしたアカウントをログアウトしておく
+
+```bash filename="Check account"
+gcloud gcloud auth list
+```
+
+```bash filename="Logout gcloud"
+gcloud gcloud auth revoke YOUR_ACCOUNT
+```
+
+### Cloud Compute からファイルをダウンロード
+
+Cloud Storage の[バケット](https://console.cloud.google.com/storage/browser)ページに戻り、作成したバケットの詳細ページを開く
+
+アップロードしたファイルが一覧に表示されているので、ダウンロードする
+
+![Download file](/others/copy-gce-object/download-file.png)
+
+### Cloud Storage バケットの削除
+
+ダウンロードが完了したら、不要なストレージ料金が発生しないよう、ファイルやバケットを削除することを推奨
+
+## Ref
+
+- [Cloud Storage を経由したファイルの転送 | Linux VM にファイルを転送する | Compute Engine ドキュメント | Google Cloud](https://cloud.google.com/compute/docs/instances/transfer-files?hl=ja#gcstransfer)
+- [バケットレベルのポリシーにプリンシパルを追加する | IAM 権限の使用  |  Cloud Storage  |  Google Cloud](https://cloud.google.com/storage/docs/access-control/using-iam-permissions?hl=ja#console)
+- [バケットにオブジェクトをアップロードする | ファイル システムからオブジェクトをアップロードする | Cloud Storage |  Google Cloud](https://cloud.google.com/storage/docs/uploading-objects?hl=ja#upload-object-cli)
+- [GCE から GCS 操作時の権限エラーでサービスアカウントの IAM 以外に疑うこと - G-gen Tech Blog](https://blog.g-gen.co.jp/entry/error-cloud-api-access-scope)
+- [google compute engine - gsutil copy to storage failing - Stack Overflow](https://stackoverflow.com/questions/22645475/gsutil-copy-to-storage-failing)
+- [How to logout from an account on gcloud SDK - Questions - OneCompiler](https://onecompiler.com/questions/3svmubqa9/how-to-logout-from-an-account-on-gcloud-sdk)
