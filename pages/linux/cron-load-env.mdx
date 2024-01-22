@@ -1,0 +1,106 @@
+# shell script を cron で実行時、環境変数を読み込む
+
+cron 謎すぎ
+
+## Overview
+
+cron でコマンドを実行する際、予め設定してある環境変数を読み込ませたい場合がある\
+このとき、Bash をログインシェルとして起動することで環境変数を読み込むことができる
+
+## In Short
+
+1. cron 実行ユーザのホームディレクトリにある `.bash_profile` に、読み込みたい環境変数を設定する
+2. shell script の開始行に記述する shebang を `#!/bin/bash -l` とする
+3. cron 内で shell script を直接実行する
+
+## Detail
+
+cron 実行時、デフォルトでは最小限の環境変数しか読み込まれない\
+このため、実行ファイルはフルパスで記述したりしなければならないなどの制約がある
+
+### 環境変数の設定
+
+`.bash_profile` はログイン時にのみ読み込まれる設定ファイル\
+この後 cron 内で Bash をログインシェルとして実行するため、このファイルに環境変数を記述しておく必要がある
+
+```bash
+echo export {EnvName}={EnvValue} >> ~/.bash_profile
+```
+
+### 実行シェルの作成
+
+cron 内で実行したい shell script を Bash で実行するため、shebang（よく言われるおまじない）を記載する\
+この時、`-l` オプションを同時に記載し、ログインシェルとして実行するようにする
+
+```bash
+#!/bin/bash -l
+```
+
+また、ファイルを直接実行するため、実行権限を付与しておく必要がある
+
+```bash
+sudo chmod 744 {scriptFilePath}
+```
+
+### cron ファイルの記述
+
+cron に記載するコマンドとして、sh ファイルを記載する
+
+```text filename="crontab"
+* * * * * /home/user/hoge.sh >>/home/user/log/hoge_$(date +\%Y\%m\%d).log
+# end of crontab
+```
+
+cron のコマンド内で `%` を記述すると改行文字に置き換えられるため、エスケープが必要なことに注意
+
+## Note
+
+### `/etc/cron.d` に cron ファイルを配置する
+
+基本的に cron は `crontab` コマンドで制御されるが、cron をファイルで管理したい場合がある\
+このとき、`/etc/cron.d` 下に cron ファイルを配置することで cron に登録することができる
+
+`crontab` とは書式が少し異なり、実行ユーザを追記する必要があるため注意
+
+```cron filename="cronfile"
+* * * * * user /home/user/hoge.sh >>/home/user/log/hoge_$(date +\%Y\%m\%d).log
+# end of cronfile
+```
+
+また、このディレクトリに配置する cron ファイルは以下の状態でなければならない
+
+- ファイルの所有者が `root` であること
+- 所有者以外の書き込み権限がないこと
+
+```bash
+sudo chown root:root /etc/cron.d/{cronfile}
+sudo chmod 644 /etc/cron.d/{cronfile}
+```
+
+配置した後、cron をリロードすることで反映される
+
+```bash filename="ubuntu"
+sudo service cron restart
+```
+
+### Windows 上で作成した cron ファイルの改行コード
+
+cron ファイルを Windows 上などで作成した場合、改行コードの問題で正常に動作しなくなる\
+そのため、改行コードを除去する必要がある
+
+```bash
+sed -i 's/\r//' {cronfilePath}
+```
+
+VS Code では、改行コードの選択から `LF` を選択しておくことでも対応が可能
+
+## Ref
+
+- [色々な cron の場所と違い【Ubuntu 18.04.4 LTS】](https://penpen-dev.com/blog/cron/)
+- [/etc/cron.d へ置くファイルには owner と permission に制約があるっぽい - モヒカンメモ](https://blog.pinkumohikan.com/entry/etc-cron.d-has-restriction-for-permission-and-owner)
+- [ubuntu で cron を動かす方法-水色のパンダ団日記](https://pandadannikki.blogspot.com/2023/03/crontab.html)
+- [crontab で date コマンドを実行 - エラーの向こうへ](https://tech.mktime.com/entry/365)
+- [cron でバッチを設定する #Linux - Qiita](https://qiita.com/kiiimiis/items/4b8d0ff0e6891e5df868)
+- [cron で処理を実行させた際に環境変数が読み込まれない件【小ネタ】 | bassbone's blog](https://blog.bassbone.tokyo/archives/1311)
+- [本当に正しい .bashrc と .bash_profile の使ひ分け #Bash - Qiita](https://qiita.com/magicant/items/d3bb7ea1192e63fba850)
+- [linux 上で動作するスクリプト先頭行に書く「#!…」行の意味は？ | 年中暁を覚えず・・・・](https://nrbm-akatsuki.com/142/)
