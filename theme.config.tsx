@@ -81,9 +81,11 @@ const config = {
       <>
         <title>{title}</title>
         <meta property="og:title" content={title} />
+        <meta property="twitter:title" content={title} />
 
         <meta property="description" content="Tiken note :)" />
         <meta property="og:description" content="Tiken note ;)" />
+        <meta property="twitter:description" content="Tiken note :o" />
 
         <link rel="icon" href="/logo.svg" />
 
@@ -97,10 +99,9 @@ const config = {
         <meta property="og:image:type" content="image/png" />
         <meta property="og:image:width" content="750" />
         <meta property="og:image:height" content="750" />
+        <meta property="twitter:image" content={siteUrl + "/image.png"} />
 
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:description" content="Tiken note :o" />
-        <meta property="twitter:image" content={siteUrl + "/image.png"} />
 
         <link rel="me" href="https://misskey.io/@unishigured" />
         <link rel="me" href="https://fedibird.com/@unishigured" />
