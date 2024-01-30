@@ -1,6 +1,6 @@
 export default {
   index: {
-    title: "Introduction",
+    title: "Top",
     display: "hidden",
   },
   works: "Works",
