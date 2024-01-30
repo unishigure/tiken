@@ -1,15 +1,20 @@
+import React from "react";
 import Image from "next/image";
+import { useConfig } from "nextra-theme-docs";
 import { useRouter } from "next/router";
 
+const siteName = "UniNote";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "localhost";
 
 const config = {
-  primaryHue: 5,
-  primarySaturation: 85,
+  color: {
+    hue: 5,
+    saturation: 85,
+  },
   logo: (
     <>
       <Image src="/logo.svg" width={32} height={32} alt="logo" />
-      <span style={{ marginLeft: ".4em", fontWeight: 800 }}>UniNote</span>
+      <span style={{ marginLeft: ".4em", fontWeight: 800 }}>{siteName}</span>
     </>
   ),
   project: {
@@ -37,7 +42,7 @@ const config = {
     toggleButton: true,
     defaultMenuCollapseLevel: 1,
   },
-  editLink: { text: null },
+  editLink: { content: null },
   toc: {
     backToTop: true,
   },
@@ -58,53 +63,49 @@ const config = {
     );
   },
   footer: {
-    text: <p> © {new Date().getFullYear()} unishigured </p>,
+    content: <p> © {new Date().getFullYear()} unishigured </p>,
   },
-  useNextSeoProps() {
+  head: () => {
+    const { frontMatter, title: pageTitle } = useConfig();
     const { asPath, defaultLocale, locale } = useRouter();
+
+    let title = `${pageTitle} - ${siteName}`;
+    if (asPath === "/") {
+      title = `${siteName}`;
+    }
 
     const url =
       siteUrl + (defaultLocale === locale ? asPath : `/${locale}${asPath}`);
 
-    let titleTemplate = "";
-    if (asPath !== "/") {
-      titleTemplate = "%s - UniNote";
-    } else {
-      titleTemplate = "UniNote";
-    }
-
-    return {
-      titleTemplate: titleTemplate,
-      description: "Tiken note :)",
-      openGraph: {
-        url: url,
-        description: "Tiken note ;)",
-        images: [
-          {
-            url: siteUrl + "/logo.png",
-            width: 750,
-            height: 750,
-            alt: "logo",
-            type: "image/png",
-          },
-        ],
-        type: "blog",
-        locale: "ja_JP",
-      },
-      twitter: {
-        cardType: "summary_large_image",
-      },
-    };
-  },
-  head: () => {
     return (
       <>
+        <title>{title}</title>
+        <meta property="og:title" content={title} />
+
+        <meta property="description" content="Tiken note :)" />
+        <meta property="og:description" content="Tiken note ;)" />
+
         <link rel="icon" href="/logo.svg" />
+
+        <meta property="og:site_name" content={siteName} />
+        <meta property="og:url" content={url} />
+        <meta property="og:type" content="blog" />
+        <meta property="og:locale" content="ja_JP" />
+
+        <meta property="og:image" content={siteUrl + "/logo.png"} />
+        <meta property="og:image:alt" content="logo" />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image:width" content="750" />
+        <meta property="og:image:height" content="750" />
+
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:description" content="Tiken note :o" />
+        <meta property="twitter:image" content={siteUrl + "/image.png"} />
+
         <link rel="me" href="https://misskey.io/@unishigured" />
         <link rel="me" href="https://fedibird.com/@unishigured" />
         <link rel="me" href="https://mi.seanut.app/@unishigured" />
-        <meta property="twitter:description" content="Tiken note :o"></meta>
-        <meta property="twitter:image" content={siteUrl + "/image.png"} />
+
         <meta charSet="utf-8" />
       </>
     );

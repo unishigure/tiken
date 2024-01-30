@@ -1,7 +1,8 @@
-import "../styles.css";
-
+import React from "react";
 import { Noto_Sans_JP } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
+
+import "../styles.css";
 
 export const notoSansJP = Noto_Sans_JP({
   subsets: ["latin", "latin-ext"],
